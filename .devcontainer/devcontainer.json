@@ -1,0 +1,18 @@
+{
+    "name": "Expensy Dev Container",
+    "build": {
+        "dockerfile": "./Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-azuretools.vscode-docker",
+                "HashiCorp.terraform",
+                "svelte.svelte-vscode",
+                "jripouteau.adonis-vscode-extension",
+                "github.vscode-github-actions",
+                "oven.bun-vscode"
+            ]
+        }
+    }
+}
