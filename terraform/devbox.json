@@ -1,0 +1,7 @@
+{
+    "name": "Expensy Shell - Infrastructure",
+    "packages": [
+        "terraform@1.10.1",
+        "gh@2.63.2"
+    ]
+}
