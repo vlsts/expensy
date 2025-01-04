@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN apk install --no-cache nodejs
+RUN apk add --no-cache nodejs
 
 RUN bun i
 
