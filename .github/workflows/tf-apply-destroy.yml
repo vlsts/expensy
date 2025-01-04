@@ -22,6 +22,12 @@ jobs:
     
           - name: Setup Terraform
             uses: hashicorp/setup-terraform@v3.1.2
+
+          - name: Write public SSH Key
+            working-directory: terraform
+            run: |
+              echo "${{ secrets.DIGITALOCEAN_SSH_KEY_PUBLIC }}" > ./login.pub
+              chmod 600 ./login.pub
     
           - name: Terraform ${{ github.event.inputs.action }}
             working-directory: terraform
