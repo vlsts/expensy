@@ -1,16 +1,16 @@
-FROM oven/bun:alpine as builder
+FROM node:22-alpine as builder
+RUN npm i -g bun
 
 WORKDIR /app
 
 COPY . .
 
-RUN apk add --no-cache nodejs
-
 RUN bun i
 
 RUN bun run build
 
-FROM oven/bun:alpine as runner
+FROM node:22-alpine as runner
+RUN npm i -g bun
 
 WORKDIR /app
 
