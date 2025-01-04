@@ -1,6 +1,0 @@
-services:
-  frontend:
-    container_name: expensy_frontend
-    image: ghcr.io/vlsts/expensy-frontend:latest
-    ports:
-      - 8080:80
