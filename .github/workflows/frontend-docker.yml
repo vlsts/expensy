@@ -97,7 +97,7 @@ jobs:
             username: "expensyadmin"
             key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
             source: "frontend/Caddyfile"
-            target: "~/expensy_configs/Caddyfile"
+            target: "~/expensy_configs/"
 
         - name: Move Caddyfile and restart
           uses: appleboy/ssh-action@master
@@ -106,6 +106,6 @@ jobs:
             username: "expensyadmin"
             key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
             script: |
-              sudo mv ~/expensy_configs/Caddyfile /etc/caddy/Caddyfile
+              sudo mv ~/expensy_configs/frontend/Caddyfile /etc/caddy/Caddyfile
               sudo systemctl restart caddy
 
