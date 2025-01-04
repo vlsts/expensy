@@ -29,4 +29,6 @@ jobs:
                 TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
                 AWS_ACCESS_KEY_ID: ${{ secrets.DIGITALOCEAN_ACCESS_KEY }}
                 AWS_SECRET_ACCESS_KEY: ${{ secrets.DIGITALOCEAN_SECRET_KEY }}
-            run: terraform ${{ github.event.inputs.action }} -auto-approve
+            run: |
+                terraform init
+                terraform ${{ github.event.inputs.action }} -auto-approve
