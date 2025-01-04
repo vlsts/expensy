@@ -1,0 +1,1 @@
+domain = "expensy.ro"
