@@ -34,6 +34,7 @@ resource "digitalocean_record" "purelymail_mx" {
   domain = digitalocean_domain.domain.name
   type   = "MX"
   name   = "@"
+  priority = 10
   value  = "mailserver.purelymail.com."
 }
 
