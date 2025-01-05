@@ -18,9 +18,7 @@ export class CategoriesService {
 
     async initializeIfEmpty() {
         try {
-            // Path should be relative to the root of the project
-            // If not JSON, the nestjs cli config will have to be configured to add that file type
-            const data = await readFile('src/categories/categories.default.json', 'utf8');
+            const data = await readFile(`${__dirname}/categories.default.json`, 'utf8');
             const jsonData: CreateCategoryDto[] = JSON.parse(data);
             for (const category of jsonData) {
                 const result = await this.categoryModel.updateOne(
