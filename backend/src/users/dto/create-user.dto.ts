@@ -1,8 +1,8 @@
-import { IsString, IsInt, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsString, IsInt, IsNotEmpty } from 'class-validator';
+import { IsStringOrUUID } from 'src/constraints/string.or.UUID.constraint';
 
 export class CreateUserDto {
-    @IsUUID()
-    @IsString()
+    @IsStringOrUUID()
     @IsNotEmpty()
     id: string;
 
