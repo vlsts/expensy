@@ -42,6 +42,10 @@ jobs:
           - name: Add MongoDB password as secret
             if: ${{ github.event.inputs.action == 'apply' }}
             working-directory: terraform
+            env:
+              TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+              AWS_ACCESS_KEY_ID: ${{ secrets.DIGITALOCEAN_ACCESS_KEY }}
+              AWS_SECRET_ACCESS_KEY: ${{ secrets.DIGITALOCEAN_SECRET_KEY }}
             run: |
               sudo apt update
               sudo apt install -y gh
