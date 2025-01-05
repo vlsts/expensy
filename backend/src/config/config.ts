@@ -1,5 +1,5 @@
 export default () => ({
-    port: parseInt(process.env.PORT, 10) || 3000,
+    port: 80,
     db_url: process.env.DB_URL,
   });
   
