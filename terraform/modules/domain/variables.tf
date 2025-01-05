@@ -22,8 +22,3 @@ variable "backend_ipv6" {
   description = "The backend IPv6 address"
   type        = string
 }
-
-variable "mongodb_cname" {
-  description = "The MongoDB CNAME entry"
-  type        = string
-}

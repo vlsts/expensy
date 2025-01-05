@@ -19,7 +19,6 @@ module "domain" {
   frontend_ipv6 = module.vm.frontend_ipv6
   backend_ipv4  = module.vm.backend_ipv4
   backend_ipv6  = module.vm.backend_ipv6
-  mongodb_cname  = module.db.mongodb_cname
 }
 
 resource "digitalocean_project_resources" "project_resources" {

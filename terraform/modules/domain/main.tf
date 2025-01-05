@@ -16,14 +16,6 @@ resource "digitalocean_record" "backend_ipv4" {
   value  = var.backend_ipv4
 }
 
-# might be useless
-resource "digitalocean_record" "mongodb_cname" {
-  domain = digitalocean_domain.domain.name
-  type   = "CNAME"
-  name   = "db"
-  value  =  "${var.mongodb_cname}."
-}
-
 resource "digitalocean_record" "frontend_ipv6" {
   domain = digitalocean_domain.domain.name
   type   = "AAAA"
