@@ -38,3 +38,12 @@ jobs:
             run: |
                 terraform init
                 terraform ${{ github.event.inputs.action }} -auto-approve
+          
+          - name: Add MongoDB password as secret
+            if: ${{ github.event.inputs.action == 'apply' }}
+            run: 
+              sudo apt update
+              sudo apt install -y gh
+              
+              echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+              gh secret set MONGODB_PASSWORD --body "$(terraform output -raw mongodb_password)"
