@@ -1,5 +1,4 @@
 export default () => ({
-    port: 80,
-    db_url: process.env.DB_URL,
-  });
-  
+  port: 80,
+  db_url: `mongodb://${process.env.DB_HOST}/expensy`,
+});
