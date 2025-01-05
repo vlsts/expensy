@@ -44,6 +44,8 @@ jobs:
             run: |
               sudo apt update
               sudo apt install -y gh
+
+              MONGODB_PASSWORD=$(terraform output -raw mongodb_password)
               
               echo "${{ secrets.GH_TOKEN }}" | gh auth login --with-token
-              gh secret set MONGODB_PASSWORD --body "$(terraform output -raw mongodb_password)"
+              echo "$MONGODB_PASSWORD" | gh secret set MONGODB_PASSWORD
