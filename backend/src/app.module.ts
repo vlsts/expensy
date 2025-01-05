@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ExpensesModule } from './expenses/expenses.module';
 
 import config from './config/config';
+import { CurrenciesModule } from './currency/currencies.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import config from './config/config';
     UsersModule,
     CategoriesModule,
     ExpensesModule,
+    CurrenciesModule
   ],
   controllers: [AppController],
   providers: [AppService],
