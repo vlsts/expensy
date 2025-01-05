@@ -41,7 +41,7 @@ jobs:
           
           - name: Add MongoDB password as secret
             if: ${{ github.event.inputs.action == 'apply' }}
-            run: 
+            run: |
               sudo apt update
               sudo apt install -y gh
               
