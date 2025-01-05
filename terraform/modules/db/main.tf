@@ -7,3 +7,8 @@ resource "digitalocean_database_cluster" "database" {
   region     = "fra1"
   node_count = 1
 }
+
+resource "digitalocean_database_user" "database_user" {
+  cluster_id = digitalocean_database_cluster.database.id
+  name       = "expensyadmin"
+}
