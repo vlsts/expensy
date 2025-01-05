@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ExpensesModule } from './expenses/expenses.module';
 
 import config from './config/config';
 
@@ -23,6 +24,7 @@ import config from './config/config';
     }),
     UsersModule,
     CategoriesModule,
+    ExpensesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
