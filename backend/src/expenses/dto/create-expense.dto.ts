@@ -10,7 +10,7 @@ export class CreateExpenseDto {
     @IsString()
     @IsNotEmpty()
     name: string;
-    
+
     @IsFloat()
     @IsNotEmpty()
     amount: number;
@@ -21,10 +21,10 @@ export class CreateExpenseDto {
 
     @IsString()
     description: string;
-    
+
     @IsArray()
     @IsString({ each: true })
-    id_files: String[]
+    id_files: string[];
 
     @IsStringOrUUID()
     @IsNotEmpty()

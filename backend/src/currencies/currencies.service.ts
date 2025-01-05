@@ -6,7 +6,10 @@ import { CreateCurrencyDto } from './dto/create-currency.dto';
 
 @Injectable()
 export class CurrenciesService {
-    constructor(@InjectModel(Currency.name) private currencyModel: Model<CurrencyDocument>) {}
+    constructor(
+        @InjectModel(Currency.name)
+        private currencyModel: Model<CurrencyDocument>,
+    ) {}
 
     async create(createCurrencyDto: CreateCurrencyDto): Promise<Currency> {
         const newCurrency = new this.currencyModel(createCurrencyDto);

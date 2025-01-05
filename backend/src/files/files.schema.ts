@@ -18,7 +18,7 @@ export class File {
     size: number;
 
     @Prop({ required: true })
-    mime_type: string
+    mime_type: string;
 }
 
 export const FileSchema = SchemaFactory.createForClass(File);

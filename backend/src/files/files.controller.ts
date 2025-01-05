@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Param, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Param,
+    Res,
+    UploadedFile,
+    UseInterceptors,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { FilesService } from './files.service';
 import { File } from './files.schema';
@@ -17,21 +26,24 @@ export class FilesController {
     @Get(':id')
     async getFile(@Param('id') id: string, @Res() res: Response) {
         const file = await this.filesService.findFileById(id);
-        
+
         if (!file) {
             return res.status(404).send('File not found');
         }
-    
+
         res.set('Content-Type', file.mime_type);
         res.send(file.data);
     }
-    
+
     @Get('/filename/:filename')
-    async getFileByFilename(@Param('filename') filename: string, @Res() res: Response) {
+    async getFileByFilename(
+        @Param('filename') filename: string,
+        @Res() res: Response,
+    ) {
         const file = await this.filesService.findFileByFilename(filename);
 
         console.log(file);
-        
+
         if (!file) {
             return res.status(404).send('File not found');
         }
@@ -42,7 +54,10 @@ export class FilesController {
 
     @Post('/upload')
     @UseInterceptors(FileInterceptor('file'))
-    async create(@Body() createFileDto: CreateFileDto, @UploadedFile() file): Promise<File> {
+    async create(
+        @Body() createFileDto: CreateFileDto,
+        @UploadedFile() file,
+    ): Promise<File> {
         createFileDto.mime_type = file.mimetype;
         return this.filesService.create(createFileDto, file.buffer, file.size);
     }

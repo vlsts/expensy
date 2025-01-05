@@ -6,7 +6,9 @@ import { CreateExpenseDto } from './dto/create-expense.dto';
 
 @Injectable()
 export class ExpensesService {
-    constructor(@InjectModel(Expense.name) private expenseModel: Model<ExpenseDocument>) {}
+    constructor(
+        @InjectModel(Expense.name) private expenseModel: Model<ExpenseDocument>,
+    ) {}
 
     async create(createExpenseDto: CreateExpenseDto): Promise<Expense> {
         const newExpense = new this.expenseModel(createExpenseDto);

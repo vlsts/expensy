@@ -6,9 +6,15 @@ import { CreateFileDto } from './dto/create-file.dto';
 
 @Injectable()
 export class FilesService {
-    constructor(@InjectModel(File.name) private fileModel: Model<FileDocument>) {}
+    constructor(
+        @InjectModel(File.name) private fileModel: Model<FileDocument>,
+    ) {}
 
-    async create(createFileDto: CreateFileDto, fileBuffer: Buffer, size: number): Promise<File> {
+    async create(
+        createFileDto: CreateFileDto,
+        fileBuffer: Buffer,
+        size: number,
+    ): Promise<File> {
         const newFile = new this.fileModel({
             ...createFileDto,
             data: fileBuffer,

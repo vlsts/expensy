@@ -5,8 +5,10 @@ import { FilesService } from './files.service';
 import { File, FileSchema } from './files.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: File.name, schema: FileSchema }])],
-  controllers: [FilesController],
-  providers: [FilesService],
+    imports: [
+        MongooseModule.forFeature([{ name: File.name, schema: FileSchema }]),
+    ],
+    controllers: [FilesController],
+    providers: [FilesService],
 })
 export class FilesModule {}

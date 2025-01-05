@@ -5,26 +5,26 @@ export type ExpenseDocument = HydratedDocument<Expense>;
 
 @Schema()
 export class Expense {
-  @Prop()
-  name: string;
+    @Prop()
+    name: string;
 
-  @Prop()
-  amount: number;
+    @Prop()
+    amount: number;
 
-  @Prop()
-  id_currency: string;
+    @Prop()
+    id_currency: string;
 
-  @Prop()
-  description: string;
+    @Prop()
+    description: string;
 
-  @Prop()
-  id_files: String[];
+    @Prop()
+    id_files: string[];
 
-  @Prop()
-  id_category: string;
+    @Prop()
+    id_category: string;
 
-  @Prop()
-  date: Date;
+    @Prop()
+    date: Date;
 }
 
 export const ExpenseSchema = SchemaFactory.createForClass(Expense);

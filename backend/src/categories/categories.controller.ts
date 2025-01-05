@@ -3,18 +3,17 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './categories.schema';
 
-
 @Controller('categories')
 export class CategoriesController {
-  constructor(private readonly categoryService: CategoriesService) {}
+    constructor(private readonly categoryService: CategoriesService) {}
 
-  @Get()
-  findAll(): string {
-    return 'This action returns all categories';
-  }
+    @Get()
+    findAll(): string {
+        return 'This action returns all categories';
+    }
 
-  @Post()
-  async create(@Body() createCatDto: CreateCategoryDto): Promise<Category> {
-      return this.categoryService.create(createCatDto);
-  }
+    @Post()
+    async create(@Body() createCatDto: CreateCategoryDto): Promise<Category> {
+        return this.categoryService.create(createCatDto);
+    }
 }

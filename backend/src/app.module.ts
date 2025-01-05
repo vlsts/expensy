@@ -12,30 +12,30 @@ import { CurrenciesModule } from './currencies/currencies.module';
 import { FilesModule } from './files/files.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      load: [config],
-      isGlobal: true,
-    }),
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('db_url'),
-        auth: {
-          username: configService.get<string>('db_username'),
-          password: configService.get<string>('db_password'),
-        },
-        dbName: configService.get<string>('db_name'),
-      }),
-    }),
-    UsersModule,
-    CategoriesModule,
-    ExpensesModule,
-    CurrenciesModule,
-    FilesModule
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        ConfigModule.forRoot({
+            load: [config],
+            isGlobal: true,
+        }),
+        MongooseModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) => ({
+                uri: configService.get<string>('db_url'),
+                auth: {
+                    username: configService.get<string>('db_username'),
+                    password: configService.get<string>('db_password'),
+                },
+                dbName: configService.get<string>('db_name'),
+            }),
+        }),
+        UsersModule,
+        CategoriesModule,
+        ExpensesModule,
+        CurrenciesModule,
+        FilesModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}
