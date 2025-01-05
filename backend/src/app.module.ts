@@ -22,6 +22,11 @@ import { FilesModule } from './files/files.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('db_url'),
+        auth: {
+          username: configService.get<string>('db_username'),
+          password: configService.get<string>('db_password'),
+        },
+        dbName: configService.get<string>('db_name'),
       }),
     }),
     UsersModule,
