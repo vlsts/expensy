@@ -5,4 +5,5 @@ output "mongodb_password" {
 
 output "mongodb_host" {
   value = module.db.mongodb_host
+  sensitive = true
 }
