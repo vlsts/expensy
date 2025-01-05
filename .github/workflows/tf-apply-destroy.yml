@@ -45,5 +45,5 @@ jobs:
               sudo apt update
               sudo apt install -y gh
               
-              echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+              echo "${{ secrets.GH_TOKEN }}" | gh auth login --with-token
               gh secret set MONGODB_PASSWORD --body "$(terraform output -raw mongodb_password)"

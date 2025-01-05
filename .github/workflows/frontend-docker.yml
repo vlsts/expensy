@@ -16,7 +16,7 @@ on:
 jobs:
     build-publish:
         runs-on: ubuntu-latest
-        name: Build Docker Image
+        name: Build Frontend Docker Image
         steps:
             - name: Clone repository
               uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
     deploy:
       runs-on: ubuntu-latest
       needs: build-publish
-      name: Deploy to DigitalOcean
+      name: Deploy Frontend to DigitalOcean
       steps:
         - name: Clone repository
           uses: actions/checkout@v4
