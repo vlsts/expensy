@@ -21,3 +21,7 @@ output "frontend_urn" {
 output "backend_urn" {
   value = digitalocean_droplet.backend.urn
 }
+
+output "backend_id" {
+  value = digitalocean_droplet.backend.id
+}

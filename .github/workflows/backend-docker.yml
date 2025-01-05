@@ -83,7 +83,7 @@ jobs:
               docker run -d \
                 --name expensy-backend \
                 -p 8080:80 \
-                -e DB_HOST="db.expensy.ro" \
+                -e DB_HOST="${{secrets.MONGODB_HOST}}" \
                 -e DB_USERNAME=expensyadmin \
                 -e DB_PASSWORD=${{secrets.MONGODB_PASSWORD}} \
                 ghcr.io/vlsts/expensy-backend:latest

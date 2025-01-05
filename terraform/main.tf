@@ -5,6 +5,7 @@ data "digitalocean_project" "project" {
 module "db" {
   source     = "./modules/db"
   project_id = data.digitalocean_project.project.id
+  backend_droplet_id = module.vm.backend_id
 }
 
 module "vm" {

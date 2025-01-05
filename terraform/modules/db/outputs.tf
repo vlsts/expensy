@@ -1,5 +1,5 @@
-output "mongodb_cname" {
-  value = digitalocean_database_cluster.database.private_host
+output "mongodb_host" {
+  value = digitalocean_database_cluster.database.host
 }
 
 output "mongodb_urn" {
