@@ -6,7 +6,10 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    app.enableCors();
+    app.enableCors({
+        origin: '*',
+        credentials: true,
+    });
     const configService: ConfigService = app.get(ConfigService);
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
@@ -16,9 +19,9 @@ async function bootstrap() {
         .setVersion('1.0')
         .build();
     const documentFactory = () => SwaggerModule.createDocument(app, config);
-    
+
     SwaggerModule.setup('', app, documentFactory);
-    
+
     await app.listen(configService.get<number>('port'));
 }
 

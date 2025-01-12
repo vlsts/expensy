@@ -1,5 +1,4 @@
 import { IsString, IsNotEmpty } from 'class-validator';
-import { IsStringOrUUID } from '../../constraints/string.or.UUID.constraint';
 
 export class CreateCategoryDto {
     @IsString()
@@ -9,10 +8,6 @@ export class CreateCategoryDto {
     @IsString()
     @IsNotEmpty()
     id_icon: string;
-
-    @IsStringOrUUID()
-    @IsNotEmpty()
-    id_user: string;
 
     @IsString()
     @IsNotEmpty()

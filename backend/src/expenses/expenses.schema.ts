@@ -24,6 +24,9 @@ export class Expense {
     id_category: string;
 
     @Prop()
+    id_user: string;
+
+    @Prop()
     date: Date;
 }
 

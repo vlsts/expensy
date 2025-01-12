@@ -25,7 +25,7 @@ export class ProfileComponent {
   }
 
   async sendRequest() {
-    const response = await fetch("http://localhost/users/", {
+    const response = await fetch("http://localhost:3000/users/", {
       headers: {
         Authorization: `Bearer ${Corbado.sessionToken}`,
       },
