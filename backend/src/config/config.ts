@@ -7,5 +7,5 @@ export default () => ({
     CORBADO_API: process.env.CORBADO_API,
     FRONTEND_API: process.env.FRONTEND_API,
     PROJECT_ID: process.env.PROJECT_ID,
-    BACKEND_API: process.env.BACKEND_API
+    BACKEND_API: process.env.BACKEND_API,
 });

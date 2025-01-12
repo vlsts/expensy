@@ -28,14 +28,22 @@ export class AuthGuard implements CanActivate {
         context: ExecutionContext,
     ): boolean | Promise<boolean> | Observable<boolean> {
         const request = context.switchToHttp().getRequest();
-        return this.validateRequest(request);
+        return this.validateRequest(request).then((response) => {
+            if (response === null) {
+                return false;
+            }
+
+            request.userId = response;
+
+            return true;
+        });
     }
 
-    async validateRequest(request): Promise<boolean> {
+    async validateRequest(request): Promise<null | string> {
         let sessionToken = request.headers['authorization'];
 
         if (!sessionToken) {
-            return false;
+            return null;
         }
 
         try {
@@ -44,11 +52,11 @@ export class AuthGuard implements CanActivate {
             const user = await this.sdk.sessions().validateToken(sessionToken);
 
             console.log(`User with ID ${user.userId} is authenticated!`);
-            return true;
+            return user.userId;
         } catch (e) {
             console.log(e);
 
-            return false;
+            return null;
         }
     }
 }
