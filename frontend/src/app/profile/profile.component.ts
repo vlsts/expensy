@@ -5,7 +5,7 @@ import { RouterOutlet } from "@angular/router";
 
 @Component({
   selector: "app-profile",
-  imports: [RouterOutlet],
+  imports: [],
   templateUrl: "./profile.component.html",
   styleUrl: "./profile.component.scss",
 })
@@ -30,5 +30,7 @@ export class ProfileComponent {
         Authorization: `Bearer ${Corbado.sessionToken}`,
       },
     });
+    
+    console.log(Corbado.sessionToken)
   }
 }
