@@ -14,6 +14,12 @@ ENV DB_HOST=localhost:27017
 ENV DB_USERNAME=
 ENV DB_PASSWORD=
 
+# Corbado api env variables
+ENV CORBADO_API=
+ENV FRONTEND_API=
+ENV PROJECT_ID=
+ENV BACKEND_API=
+
 WORKDIR /app
 
 COPY --from=builder /app/dist .

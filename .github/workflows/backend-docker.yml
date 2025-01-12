@@ -86,6 +86,10 @@ jobs:
                 -e DB_HOST="mongodb+srv://${{secrets.MONGODB_HOST}}" \
                 -e DB_USERNAME=expensyadmin \
                 -e DB_PASSWORD=${{secrets.MONGODB_PASSWORD}} \
+                -e CORBADO_API=${{secrets.CORBADO_API}} \
+                -e FRONTEND_API=${{secrets.FRONTEND_API}} \
+                -e PROJECT_ID=${{secrets.PROJECT_ID}} \
+                -e BACKEND_API=${{secrets.BACKEND_API}} \
                 ghcr.io/vlsts/expensy-backend:latest
 
         - name: Make Configs folder
