@@ -1,3 +1,5 @@
 .devbox
 *.lock
 *.lockb
+login
+login.pub
