@@ -1,6 +1,5 @@
 node_modules
 .devbox
-.svelte-kit
-build
+dist
 bun.lockb
 devbox.lock
