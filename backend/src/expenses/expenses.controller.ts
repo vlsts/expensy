@@ -29,8 +29,8 @@ export class ExpensesController {
     }
 
     @Post()
-    async create(@Body() createExpenseDto: CreateExpenseDto): Promise<Expense> {
-        return this.expenseService.create(createExpenseDto);
+    async create(@Body() createExpenseDto: CreateExpenseDto, @Request() request): Promise<Expense> {
+        return this.expenseService.create(createExpenseDto, request.userId);
     }
 
     @Put(':id')

@@ -5,28 +5,28 @@ export type ExpenseDocument = HydratedDocument<Expense>;
 
 @Schema()
 export class Expense {
-    @Prop()
+    @Prop({required: true})
     name: string;
 
-    @Prop()
+    @Prop({required: true})
     amount: number;
 
-    @Prop()
+    @Prop({required: true})
     id_currency: string;
 
     @Prop()
     description: string;
 
-    @Prop()
+    @Prop({required: true})
     id_files: string[];
 
-    @Prop()
+    @Prop({required: true})
     id_category: string;
 
-    @Prop()
+    @Prop({required: true})
     id_user: string;
 
-    @Prop()
+    @Prop({required: true})
     date: Date;
 }
 
