@@ -45,7 +45,6 @@ export class CategoriesService {
         categories = [
             ...defaultCategories.map((category) => {
                 return {
-                    id_user: category.id_user,
                     id_icon: category.id_icon,
                     color: category.color,
                     name: category.name,
@@ -54,7 +53,6 @@ export class CategoriesService {
             }),
             ...userCategories.map((category) => {
                 return {
-                    id_user: category.id_user,
                     id_icon: category.id_icon,
                     color: category.color,
                     name: category.name,

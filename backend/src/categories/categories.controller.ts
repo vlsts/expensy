@@ -12,6 +12,7 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './categories.schema';
 import { AuthGuard } from '../guards/auth.guard';
+import { GetCategoryDto } from './dto/get-category.dto';
 
 @UseGuards(AuthGuard)
 @Controller('categories')
@@ -19,7 +20,7 @@ export class CategoriesController {
     constructor(private readonly categoryService: CategoriesService) {}
 
     @Get()
-    async findAll(@Request() request): Promise<Category[]> {
+    async findAll(@Request() request): Promise<GetCategoryDto[]> {
         const categories = await this.categoryService.getAll(request.userId);
 
         return categories;

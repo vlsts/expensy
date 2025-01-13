@@ -17,8 +17,4 @@ export class GetCategoryDto {
     @IsString()
     @IsNotEmpty()
     color: string;
-
-    @IsString()
-    @IsNotEmpty()
-    id_user: string;
 }
