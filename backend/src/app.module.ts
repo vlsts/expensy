@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UsersModule } from './users/users.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ExpensesModule } from './expenses/expenses.module';
@@ -27,7 +26,6 @@ import { FilesModule } from './files/files.module';
                 dbName: configService.get<string>('db_name'),
             }),
         }),
-        UsersModule,
         CategoriesModule,
         ExpensesModule,
         CurrenciesModule,
