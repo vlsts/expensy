@@ -14,29 +14,14 @@ export class CurrenciesService {
         this.initializeIfEmpty();
     }
 
-    async getAll(userId: string): Promise<GetCurrencyDto[]> {
-        let currencies: GetCurrencyDto[] = [];
+    async getAll(): Promise<GetCurrencyDto[]> {
+        let currencies: GetCurrencyDto[] = await this.currencyModel.find();
 
-        const defaultCurrencies = await this.currencyModel.find({
-            id_user: '00000000-0000-0000-0000-000000000000',
-        });
-
-        const userCurrencies = await this.currencyModel.find({
-            id_user: userId,
-        });
-
-        currencies = [
-            ...defaultCurrencies.map((category) => {
-                return {
-                    shortname: category.shortname,
-                };
-            }),
-            ...userCurrencies.map((category) => {
-                return {
-                    shortname: category.shortname,
-                };
-            }),
-        ];
+        currencies = currencies.map((currency) => {
+            return {
+                shortname: currency.shortname,
+            };
+        })
 
         return currencies;
     }
