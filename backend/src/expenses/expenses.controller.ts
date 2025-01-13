@@ -14,6 +14,7 @@ import { CreateExpenseDto } from './dto/create-expense.dto';
 import { Expense } from './expenses.schema';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { AuthGuard } from '../guards/auth.guard';
+import { GetExpenseDto } from './dto/get-expense.dto';
 
 @UseGuards(AuthGuard)
 @Controller('expenses')
@@ -21,8 +22,10 @@ export class ExpensesController {
     constructor(private readonly expenseService: ExpensesService) {}
 
     @Get()
-    findAll(): string {
-        return 'This action returns all expenses';
+    async findAll(@Request() request): Promise<GetExpenseDto[]> {
+        const expenses = await this.expenseService.getAll(request.userId);
+
+        return expenses;
     }
 
     @Post()

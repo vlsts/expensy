@@ -2,7 +2,11 @@ import { IsString, IsNotEmpty, IsArray, IsDate } from 'class-validator';
 import { IsFloat } from '../../constraints/float.constraint';
 import { IsStringOrUUID } from '../../constraints/string.or.UUID.constraint';
 
-export class CreateExpenseDto {
+export class GetExpenseDto {
+    @IsStringOrUUID()
+    @IsNotEmpty()
+    id_expense: string;
+
     @IsString()
     @IsNotEmpty()
     name: string;
