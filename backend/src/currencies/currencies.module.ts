@@ -13,5 +13,6 @@ import { Currency, CurrencySchema } from './currencies.schema';
     ],
     controllers: [CurrenciesController],
     providers: [CurrenciesService],
+    exports: [CurrenciesService]
 })
 export class CurrenciesModule {}
