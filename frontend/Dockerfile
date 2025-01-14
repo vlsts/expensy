@@ -1,4 +1,4 @@
-FROM oven/bun:alpine AS builder
+FROM oven/bun:debian AS builder
 
 WORKDIR /app
 COPY . .
