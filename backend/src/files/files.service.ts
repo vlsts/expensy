@@ -11,6 +11,7 @@ import { promises as fs } from 'fs';
 
 import Tesseract from 'tesseract.js';
 import natural from 'natural';
+import { GetFileDto } from './dto/get-file.dto';
 
 @Injectable()
 export class FilesService {
@@ -40,8 +41,19 @@ export class FilesService {
         }
     }
 
-    async findAll(): Promise<File[]> {
-        return this.fileModel.find().exec();
+    async findAll(userId: string): Promise<GetFileDto[]> {
+        let files = await this.fileModel
+            .find({
+                id_user: userId,
+            })
+            .exec();
+
+        return files.map(f => ({
+            id: f._id.toString(),
+            filename: f.filename,
+            size: f.size,
+            mime_type: f.mime_type,
+        }))
     }
 
     async findFileById(id: string): Promise<File | null> {
