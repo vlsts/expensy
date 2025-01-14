@@ -50,4 +50,8 @@ export class CurrenciesService {
             console.error('Error inserting document:', error);
         }
     }
+
+    async getCurrencyID(shortname: string): Promise<string> {
+        return (await this.currencyModel.findOne({shortname}).exec())._id.toString();
+    }
 }
