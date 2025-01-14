@@ -3,15 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { File, FileDocument } from './files.schema';
 import { CreateFileDto } from './dto/create-file.dto';
-import { OcrService } from 'src/ocr/ocr.service';
 import { CreateExpenseDto } from 'src/expenses/dto/create-expense.dto';
+import { ExpensesService } from 'src/expenses/expenses.service';
 import { CurrenciesService } from 'src/currencies/currencies.service';
 import { RegexpTokenizer } from 'natural';
 import { promises as fs } from 'fs';
 
 import Tesseract from 'tesseract.js';
 import natural from 'natural';
-import { ExpensesService } from 'src/expenses/expenses.service';
 
 @Injectable()
 export class FilesService {
