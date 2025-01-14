@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { File, FileDocument } from './files.schema';
@@ -8,17 +8,20 @@ import { ExpensesService } from 'src/expenses/expenses.service';
 import { CurrenciesService } from 'src/currencies/currencies.service';
 import { RegexpTokenizer } from 'natural';
 import { promises as fs } from 'fs';
+import { GetFileDto } from './dto/get-file.dto';
+import { HfInference } from '@huggingface/inference'
+import { ConfigService } from '@nestjs/config';
 
 import Tesseract from 'tesseract.js';
 import natural from 'natural';
-import { GetFileDto } from './dto/get-file.dto';
 
 @Injectable()
 export class FilesService {
     constructor(
         @InjectModel(File.name) private fileModel: Model<FileDocument>,
-        private currencyService: CurrenciesService,
-        private expenseService: ExpensesService
+        @Inject(forwardRef(() => CurrenciesService)) private currencyService,
+        @Inject(forwardRef(() => ExpensesService)) private expenseService,
+        private configService: ConfigService
     ) {}
 
     async create(
@@ -133,16 +136,50 @@ export class FilesService {
     async extractWordsUntilSymbol(input: string, symbol: string): Promise<string> {
         const escapedSymbol = this.escapeRegExp(symbol);
         
-        const regex = new RegExp(`(.*?)${escapedSymbol}`, 's'); // Match everything up to the first occurrence of the symbol
+        const regex = new RegExp(`(.*?)${escapedSymbol}`, 's');
     
         const match = input.match(regex);
     
         if (match) {
-            const words: string = match[1].trim().split(/\s+/).join(' '); // Split by whitespace
+            const words: string = match[1].trim().split(/\s+/).join(' ');
             return words;
         }
     
         return "";
+    }
+
+    async classifyExpense(expenseDescription: string): Promise<string> {
+        const hf = new HfInference(this.configService.get<string>('BACKEND_API'));
+        const scoreThreshold: number = 0.4;
+
+        try {
+            const categories = await fs.readFile(
+                `backend\\src\\categories\\categories.default.json`,
+                'utf8',
+            );
+        
+            const categoriesParsed = JSON.parse(categories);
+    
+            const candidateLabels = categoriesParsed.map(currency => currency.name).slice(0, 10); // TODO: Cycle through them all
+
+            const result = (await hf.zeroShotClassification({
+                model: 'facebook/bart-large-mnli',
+                inputs: expenseDescription,
+                parameters: {
+                    candidate_labels: candidateLabels,
+                }
+            }))[0];
+    
+            console.log("Classification Results: ", result);
+    
+            const highestScoreIndex = result.scores.indexOf(Math.max(...result.scores));
+            const bestLabel = result.scores[0] >= scoreThreshold ? result.labels[highestScoreIndex] : "";
+    
+            console.log("Best Expense Category:", bestLabel);
+            return bestLabel;
+        } catch (error) {
+            console.error("Error classifying expense:", error);
+        }
     }
 
     async doOCR(data: Buffer, filename: string): Promise<CreateExpenseDto[]> {
@@ -186,14 +223,16 @@ export class FilesService {
                 }
             } 
             
-            let expenseObject: string = await this.extractWordsUntilSymbol(resultedTextParts[index], currencyName)
+            let expenseObject: string = await this.extractWordsUntilSymbol(resultedTextParts[index], currencyName);
 
-            let expenseToAdd = new CreateExpenseDto();
+            let expenseCategory: string = expenseObject === "" ? "" : await this.classifyExpense(expenseObject);
+
+            let expenseToAdd: CreateExpenseDto = new CreateExpenseDto();
 
             expenseToAdd.name = expenseObject + expenseNumber;
             expenseToAdd.amount = (await this.extractNumbers(resultedTextParts[index]))[-1];
             expenseToAdd.description = "";
-            expenseToAdd.id_category = ""; // TODO: Finish here
+            expenseToAdd.id_category = expenseCategory;
             expenseToAdd.id_files = [await this.getFileID(filename)];
             expenseToAdd.id_currency = await this.currencyService.getCurrencyID(currencyName);
 
