@@ -3,6 +3,9 @@ FROM oven/bun:alpine AS builder
 WORKDIR /app
 COPY . .
 
+ENV PUBLIC_CORBADO_PROJECT_ID=
+ENV PUBLIC_CORBADO_SUPPORT_MAIL=
+
 RUN bun i
 
 RUN bun run build
