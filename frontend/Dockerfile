@@ -7,16 +7,10 @@ ENV PUBLIC_CORBADO_PROJECT_ID=
 ENV PUBLIC_CORBADO_SUPPORT_MAIL=
 
 RUN bun i
+RUN bun i -g serve
 
 RUN bun run build
 
-FROM oven/bun:alpine AS runner
-RUN bun i -g serve
-
-WORKDIR /app
-
-COPY --from=builder /app/build .
-
-CMD ["bun", "x", "serve", "-s", ".", "-l", "80", "--no-port-switching"]
+CMD ["bun", "x", "serve", "-s", "/app/build/", "-l", "80", "--no-port-switching"]
 
 EXPOSE 80
