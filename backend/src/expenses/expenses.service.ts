@@ -25,13 +25,15 @@ export class ExpensesService {
     }
 
     async getAll(userId: string): Promise<GetExpenseDto[]> {
-        let expenses: GetExpenseDto[] = await this.expenseModel.find({
+        let expenses: ExpenseDocument[] = await this.expenseModel.find({
             id_user: userId,
         });
 
-        expenses = expenses.map((expense) => {
+        let expensesDTO: GetExpenseDto[];
+
+        expensesDTO = expenses.map((expense) => {
             return {
-                id_expense: expense.id_expense,
+                id_expense: expense._id.toString(),
                 name: expense.name,
                 amount: expense.amount,
                 id_currency: expense.id_currency,
@@ -42,7 +44,7 @@ export class ExpensesService {
             };
         });
 
-        return expenses;
+        return expensesDTO;
     }
 
     async update(
