@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@corbado/node-sdk": "^3.0.2",
+    "@huggingface/inference": "^2.8.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^10.0.0",
