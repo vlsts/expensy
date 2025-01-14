@@ -104,4 +104,8 @@ export class CategoriesService {
 
         await this.categoryModel.findByIdAndDelete(id);
     }
+
+    async getCategoryID(name: string): Promise<string> {
+        return (await this.categoryModel.findOne({name}).exec())._id.toString();
+    }
 }
