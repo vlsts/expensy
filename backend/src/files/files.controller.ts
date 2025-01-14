@@ -57,8 +57,8 @@ export class FilesController {
     async create(
         @Body() createFileDto: CreateFileDto,
         @UploadedFile() file,
-    ): Promise<File> {
+    ){
         createFileDto.mime_type = file.mimetype;
-        return this.filesService.create(createFileDto, file.buffer, file.size);
+        this.filesService.create(createFileDto, file.buffer, file.size);
     }
 }

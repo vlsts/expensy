@@ -3,25 +3,31 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { File, FileDocument } from './files.schema';
 import { CreateFileDto } from './dto/create-file.dto';
+import { OcrService } from 'src/ocr/ocr.service';
 
 @Injectable()
 export class FilesService {
     constructor(
         @InjectModel(File.name) private fileModel: Model<FileDocument>,
+        private ocrService: OcrService,
     ) {}
 
     async create(
         createFileDto: CreateFileDto,
         fileBuffer: Buffer,
         size: number,
-    ): Promise<File> {
+    ) {
         const newFile = new this.fileModel({
             ...createFileDto,
             data: fileBuffer,
             size,
         });
 
-        return newFile.save();
+        newFile.save()
+
+        if (createFileDto.doOCR) {
+            this.ocrService.doOCR(fileBuffer, newFile.filename);
+        }
     }
 
     async findAll(): Promise<File[]> {
@@ -34,5 +40,9 @@ export class FilesService {
 
     async findFileByFilename(filename: string): Promise<File | null> {
         return this.fileModel.findOne({ filename }).exec();
+    }
+
+    async getFileID(filename: string): Promise<string> {
+        return (await this.fileModel.findOne({filename}).exec())._id.toString();
     }
 }
