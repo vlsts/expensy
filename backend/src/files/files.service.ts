@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { File, FileDocument } from './files.schema';
 import { CreateFileDto } from './dto/create-file.dto';
 import { OcrService } from 'src/ocr/ocr.service';
+import { CreateExpenseDto } from 'src/expenses/dto/create-expense.dto';
 
 @Injectable()
 export class FilesService {
@@ -26,7 +27,9 @@ export class FilesService {
         newFile.save()
 
         if (createFileDto.doOCR) {
-            this.ocrService.doOCR(fileBuffer, newFile.filename);
+            const addedExpenses: CreateExpenseDto[] = await this.ocrService.doOCR(fileBuffer, newFile.filename);
+
+            return addedExpenses;
         }
     }
 
