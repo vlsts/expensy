@@ -72,6 +72,25 @@ export class OcrService {
         return [];
     }
 
+    async escapeRegExp(symbol: string): Promise<string> {
+        return symbol.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    
+    async extractWordsUntilSymbol(input: string, symbol: string): Promise<string> {
+        const escapedSymbol = this.escapeRegExp(symbol);
+        
+        const regex = new RegExp(`(.*?)${escapedSymbol}`, 's'); // Match everything up to the first occurrence of the symbol
+    
+        const match = input.match(regex);
+    
+        if (match) {
+            const words: string = match[1].trim().split(/\s+/).join(' '); // Split by whitespace
+            return words;
+        }
+    
+        return "";
+    }
+
     async doOCR(data: Buffer, filename: string): Promise<CreateExpenseDto[]> {
         let resultedText = (await Tesseract.recognize(data, "eng")).data.text;
 
@@ -105,13 +124,19 @@ export class OcrService {
         let index: number = 0;
 
         while(index <= resultedTextParts.length - 1) {
-            while (!resultedTextParts[index].includes(currencyName) && index <= resultedTextParts.length - 1) {
+            while (!resultedTextParts[index].includes(currencyName)) {
                 index ++;
-            }
+
+                if (index > resultedTextParts.length) {
+                    break;
+                }
+            } 
+            
+            let expenseObject: string = await this.extractWordsUntilSymbol(resultedTextParts[index], currencyName)
 
             let expenseToAdd = new CreateExpenseDto();
 
-            expenseToAdd.name = filename + expenseNumber;
+            expenseToAdd.name = expenseObject + expenseNumber;
             expenseToAdd.amount = (await this.extractNumbers(resultedTextParts[index]))[-1];
             expenseToAdd.description = "";
             expenseToAdd.id_category = ""; // TODO: Finish here
