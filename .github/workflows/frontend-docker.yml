@@ -77,7 +77,7 @@ jobs:
             docker stop expensy-frontend || true
             docker rm expensy-frontend || true
             docker run -d \
-              --name expensy-frontend
+              --name expensy-frontend \
               -p 8080:80 \
               ghcr.io/vlsts/expensy-frontend:latest
 
