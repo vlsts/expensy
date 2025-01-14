@@ -39,23 +39,33 @@ export class AuthGuard implements CanActivate {
         });
     }
 
+    private extractToken(request): string | null {
+        // Check Bearer token
+        const authHeader = request.headers['authorization'];
+        if (authHeader) {
+            return authHeader.split(' ')[1];
+        }
+    
+        // Check Corbado cookies
+        const cookies = request.cookies;
+        return cookies['cbo_short_session'] || 
+               cookies['cbo_session_token'] || 
+               null;
+    }
+
     async validateRequest(request): Promise<null | string> {
-        let sessionToken = request.headers['authorization'];
+        let sessionToken = this.extractToken(request);
 
         if (!sessionToken) {
             return null;
         }
-
+    
         try {
-            // remove "Bearer " from the auth token
-            sessionToken = sessionToken.split(' ')[1];
             const user = await this.sdk.sessions().validateToken(sessionToken);
-
             console.log(`User with ID ${user.userId} is authenticated!`);
             return user.userId;
         } catch (e) {
             console.log(e);
-
             return null;
         }
     }
