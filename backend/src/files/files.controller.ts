@@ -7,20 +7,24 @@ import {
     Res,
     UploadedFile,
     UseInterceptors,
+    UseGuards,
+    Request,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { FilesService } from './files.service';
-import { File } from './files.schema';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { GetFileDto } from './dto/get-file.dto';
 
+@UseGuards(AuthGuard)
 @Controller('files')
 export class FilesController {
     constructor(private readonly filesService: FilesService) {}
 
     @Get()
-    async findAll(): Promise<File[]> {
-        return this.filesService.findAll();
+    async findAll(@Request() request): Promise<GetFileDto[]> {
+        return await this.filesService.findAll(request.userId);
     }
 
     @Get(':id')
