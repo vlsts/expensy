@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean } from 'class-validator';
 
 export class CreateFileDto {
     @IsString()
@@ -8,4 +8,8 @@ export class CreateFileDto {
     @IsString()
     @IsNotEmpty()
     mime_type: string;
+
+    @IsBoolean()
+    @IsNotEmpty()
+    doOCR: boolean;
 }
