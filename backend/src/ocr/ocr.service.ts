@@ -57,39 +57,74 @@ export class OcrService {
         return detectedCurrency || 'No currency found';
     }
 
+    async extractNumbers(inputString: string): Promise<number[]> {
+        const regex = /-?\d+([.,]\d+)?/g;
+    
+        const matches = inputString.match(regex);
+        
+        if (matches) {
+            return matches.map(match => {
+                const normalizedMatch = match.replace(',', '.');
+                return parseFloat(normalizedMatch);
+            });
+        }
+    
+        return [];
+    }
 
-    async doOCR(data: Buffer, filename: string): Promise<boolean> {
+    async doOCR(data: Buffer, filename: string): Promise<CreateExpenseDto[]> {
         let resultedText = (await Tesseract.recognize(data, "eng")).data.text;
 
         if (resultedText === "") {
-            return false;
+            console.log("No text could be retrieved from the receipt!")
+            return [];
         }
 
         let tokenizer: RegexpTokenizer = new natural.RegexpTokenizer({pattern: /((?:\$|€|£|¥|₹|[A-Z]{3})\s*\d+(?:\s?(?:\.|,)\d+)?)/g});
         
         let resultedTextParts = tokenizer.tokenize(resultedText);
 
+        resultedTextParts = resultedText.split(/(\n)/).filter(line => line.trim() !== '');
+
         if (resultedTextParts.length === 0) {
-            return false;
+            console.log("Text parts could not be retrieved!")
+            return [];
         }
 
         const currencyName: string = await this.detectCurrency(resultedTextParts);
 
         if (currencyName === 'No currency found') {
-            return false;
+            console.log("Currency could not be retrieved!")
+            return [];
         }
 
         const uploadedFile: File = await this.fileService.findFileByFilename(filename);
 
-        let expenseToAdd = new CreateExpenseDto();
+        let addedExpenses: CreateExpenseDto[] = [];
+        let expenseNumber: number = 0;
+        let index: number = 0;
 
-        expenseToAdd.name = filename;
-        expenseToAdd.amount = 0; // TODO: Finish here
-        expenseToAdd.description = "";
-        expenseToAdd.id_category = ""; // TODO: Finish here
-        expenseToAdd.id_files = [await this.fileService.getFileID(filename)];
-        expenseToAdd.id_currency = await this.currencyService.getCurrencyID(currencyName);
+        while(index <= resultedTextParts.length - 1) {
+            while (!resultedTextParts[index].includes(currencyName) && index <= resultedTextParts.length - 1) {
+                index ++;
+            }
 
-        this.expenseService.create(expenseToAdd, uploadedFile.id_user)
+            let expenseToAdd = new CreateExpenseDto();
+
+            expenseToAdd.name = filename + expenseNumber;
+            expenseToAdd.amount = (await this.extractNumbers(resultedTextParts[index]))[-1];
+            expenseToAdd.description = "";
+            expenseToAdd.id_category = ""; // TODO: Finish here
+            expenseToAdd.id_files = [await this.fileService.getFileID(filename)];
+            expenseToAdd.id_currency = await this.currencyService.getCurrencyID(currencyName);
+
+            this.expenseService.create(expenseToAdd, uploadedFile.id_user)
+
+            addedExpenses.push(expenseToAdd);
+
+            expenseNumber++;
+        }
+
+        return addedExpenses;
     }
 }
