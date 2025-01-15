@@ -8,4 +8,5 @@ export default () => ({
     FRONTEND_API: process.env.FRONTEND_API,
     PROJECT_ID: process.env.PROJECT_ID,
     BACKEND_API: process.env.BACKEND_API,
+    HUGGINGFACE_API_KEY: process.env.HUGGINGFACE_API_KEY,
 });
