@@ -52,6 +52,26 @@ export class CurrenciesService {
     }
 
     async getCurrencyID(shortname: string): Promise<string> {
+        switch (shortname) {
+            case '$':
+                shortname = 'USD';
+                break;
+            case '€':
+                shortname = 'EUR';
+                break;
+            case '£':
+                shortname = 'GBP';
+                break;
+            case '¥':
+                shortname = 'JPY';
+                break;
+            case '₹':
+                shortname = 'INR';
+                break;
+            default:
+                break;
+        }
+
         return (await this.currencyModel.findOne({shortname}).exec())._id.toString();
     }
 }

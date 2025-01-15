@@ -47,8 +47,6 @@ export class FilesController {
     ) {
         const file = await this.filesService.findFileByFilename(filename);
 
-        console.log(file);
-
         if (!file) {
             return res.status(404).send('File not found');
         }

@@ -14,13 +14,16 @@ import { GetExpenseDto } from './dto/get-expense.dto';
 export class ExpensesService {
     constructor(
         @InjectModel(Expense.name) private expenseModel: Model<ExpenseDocument>,
-    ) { }
+    ) {}
 
-    async create(createExpenseDto: CreateExpenseDto, userId: string): Promise<Expense> {
+    async create(
+        createExpenseDto: CreateExpenseDto,
+        userId: string,
+    ): Promise<Expense> {
         const newExpense = new this.expenseModel({
             ...createExpenseDto,
             id_user: userId,
-    });
+        });
         return newExpense.save();
     }
 

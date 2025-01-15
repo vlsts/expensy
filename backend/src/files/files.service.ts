@@ -11,16 +11,18 @@ import { promises as fs } from 'fs';
 import { GetFileDto } from './dto/get-file.dto';
 import { HfInference } from '@huggingface/inference';
 import { ConfigService } from '@nestjs/config';
+import { CategoriesService } from 'src/categories/categories.service';
 
-import Tesseract from 'tesseract.js';
-import natural from 'natural';
+let Tesseract = require('tesseract.js');
+let natural = require('natural');
 
 @Injectable()
 export class FilesService {
     constructor(
         @InjectModel(File.name) private fileModel: Model<FileDocument>,
-        @Inject(forwardRef(() => CurrenciesService)) private currencyService,
-        @Inject(forwardRef(() => ExpensesService)) private expenseService,
+        @Inject(forwardRef(() => CurrenciesService)) private currencyService: CurrenciesService,
+        @Inject(forwardRef(() => ExpensesService)) private expenseService: ExpensesService,
+        @Inject(forwardRef(() => CategoriesService)) private categoryService: CategoriesService,
         private configService: ConfigService,
     ) {}
 
@@ -80,7 +82,7 @@ export class FilesService {
 
     async detectCurrency(words: string[]): Promise<string> {
         const currencies = await fs.readFile(
-            `backend\\src\\currencies\\currencies.default.json`,
+            `${__dirname}/../currencies/currencies.default.json`,
             'utf8',
         );
 
@@ -100,6 +102,7 @@ export class FilesService {
                 const match = word.match(symbolPattern);
                 if (match) {
                     detectedCurrency = match[0];
+
                     return detectedCurrency;
                 }
             }
@@ -159,13 +162,13 @@ export class FilesService {
 
     async classifyExpense(expenseDescription: string): Promise<string> {
         const hf = new HfInference(
-            this.configService.get<string>('BACKEND_API'),
+            this.configService.get<string>('HUGGINGFACE_API_KEY'),
         );
         const scoreThreshold: number = 0.4;
 
         try {
             const categories = await fs.readFile(
-                `backend\\src\\categories\\categories.default.json`,
+                `${__dirname}/../categories/categories.default.json`,
                 'utf8',
             );
 
@@ -193,7 +196,7 @@ export class FilesService {
             const bestLabel =
                 result.scores[0] >= scoreThreshold
                     ? result.labels[highestScoreIndex]
-                    : '';
+                    : 'General';
 
             console.log('Best Expense Category:', bestLabel);
             return bestLabel;
@@ -203,10 +206,8 @@ export class FilesService {
     }
 
     async doOCR(data: Buffer, filename: string): Promise<CreateExpenseDto[]> {
-        let recog = await Tesseract.recognize(data, 'eng')
+        let recog = await Tesseract.recognize(data, 'eng');
         let resultedText = recog.data.text;
-        console.log("djkdkfajfkadjfadsk")
-        console.log(resultedText);
 
         if (resultedText === '') {
             console.log('No text could be retrieved from the receipt!');
@@ -219,10 +220,11 @@ export class FilesService {
 
         let resultedTextParts = tokenizer.tokenize(resultedText);
 
+        
         resultedTextParts = resultedText
-            .split(/(\n)/)
-            .filter((line) => line.trim() !== '');
-
+        .split(/(\n)/)
+        .filter((line) => line.trim() !== '');
+        
         if (resultedTextParts.length === 0) {
             console.log('Text parts could not be retrieved!');
             return [];
@@ -243,14 +245,16 @@ export class FilesService {
         let index: number = 0;
 
         while (index <= resultedTextParts.length - 1) {
+            let insideWhile = false;
             while (!resultedTextParts[index].includes(currencyName)) {
                 index++;
 
-                if (index > resultedTextParts.length) {
+                if (index > resultedTextParts.length - 1) {
+                    insideWhile = true;
                     break;
                 }
             }
-
+            if (insideWhile) break;
             let expenseObject: string = await this.extractWordsUntilSymbol(
                 resultedTextParts[index],
                 currencyName,
@@ -258,26 +262,26 @@ export class FilesService {
 
             let expenseCategory: string =
                 expenseObject === ''
-                    ? ''
+                    ? 'General'
                     : await this.classifyExpense(expenseObject);
 
             let expenseToAdd: CreateExpenseDto = new CreateExpenseDto();
-
+            let amounts = await this.extractNumbers(resultedTextParts[index]);
             expenseToAdd.name = expenseObject + expenseNumber;
-            expenseToAdd.amount = (
-                await this.extractNumbers(resultedTextParts[index])
-            )[-1];
+            expenseToAdd.amount = amounts[amounts.length - 1];
             expenseToAdd.description = '';
-            expenseToAdd.id_category = expenseCategory;
+            expenseToAdd.id_category = await this.categoryService.getCategoryID(expenseCategory);
             expenseToAdd.id_files = [await this.getFileID(filename)];
             expenseToAdd.id_currency =
                 await this.currencyService.getCurrencyID(currencyName);
+            expenseToAdd.date = new Date().toString();
 
             this.expenseService.create(expenseToAdd, uploadedFile.id_user);
 
             addedExpenses.push(expenseToAdd);
 
             expenseNumber++;
+            index++;
         }
 
         return addedExpenses;

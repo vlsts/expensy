@@ -21,7 +21,7 @@
 			await categories.deleteCategory(categoryId);
 		} catch (error) {
 			showDefaultCategoryToast = true;
-			setTimeout(() => showDefaultCategoryToast = false, 3000);
+			setTimeout(() => (showDefaultCategoryToast = false), 3000);
 		}
 	}
 
@@ -57,8 +57,9 @@
 				{#each $categories.items as category}
 					<div class="flex items-center justify-between p-3 rounded-lg border">
 						<div class="flex items-center gap-3">
-							<div class="w-10 h-10 rounded-full flex items-center justify-center"
-								 style:background-color={'#' + category.color + '33'}>
+							<div
+								class="w-10 h-10 rounded-full flex items-center justify-center"
+								style:background-color={'#' + category.color + '33'}>
 								<Icon icon={category.id_icon} class="w-5 h-5" />
 							</div>
 							<span class="font-medium">{category.name}</span>
@@ -67,8 +68,7 @@
 							size="xs"
 							color="red"
 							class="!p-2"
-							on:click={() => handleCategoryDelete(category.id_category)}
-						>
+							on:click={() => handleCategoryDelete(category.id_category)}>
 							<Icon icon="bi:trash" class="w-4 h-4" />
 						</Button>
 					</div>
@@ -85,12 +85,7 @@
 				{#each $files.items as file}
 					<div class="flex items-center justify-between py-3">
 						<span class="truncate">{file.filename}</span>
-						<Button
-							size="xs"
-							color="red"
-							class="!p-2"
-							on:click={() => handleFileDelete(file.id!)}
-						>
+						<Button size="xs" color="red" class="!p-2" on:click={() => handleFileDelete(file.id!)}>
 							<Icon icon="bi:trash" class="w-4 h-4" />
 						</Button>
 					</div>
