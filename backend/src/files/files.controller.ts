@@ -9,6 +9,7 @@ import {
     UseInterceptors,
     UseGuards,
     Request,
+    BadRequestException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { FilesService } from './files.service';
@@ -59,10 +60,31 @@ export class FilesController {
     @Post('/upload')
     @UseInterceptors(FileInterceptor('file'))
     async create(
-        @Body() createFileDto: CreateFileDto,
         @UploadedFile() file,
-    ){
-        createFileDto.mime_type = file.mimetype;
-        this.filesService.create(createFileDto, file.buffer, file.size);
+        @Body() body: { createFileDto: string },
+        @Request() request,
+    ) {
+        try {
+            // Parse the JSON string into CreateFileDto
+            const createFileDto: CreateFileDto = JSON.parse(body.createFileDto);
+
+            // Override mime_type with actual file mimetype
+            createFileDto.mime_type = file.mimetype;
+
+            // Create file and return the result
+            const result = await this.filesService.create(
+                createFileDto,
+                file.buffer,
+                file.size,
+                request.userId,
+            );
+
+            return result;
+        } catch (error) {
+            if (error instanceof SyntaxError) {
+                throw new BadRequestException('Invalid createFileDto format');
+            }
+            throw error;
+        }
     }
 }
