@@ -69,7 +69,7 @@
 					<div class="flex items-center">
 						<Avatar id="avatar-menu" src="" />
 						<Dropdown triggeredBy="#avatar-menu">
-							<DropdownItem href="/app/passkey-settings">Passkey Settings</DropdownItem>
+							<DropdownItem href="/app/account">Passkey Settings</DropdownItem>
 							<DropdownItem on:click={handleLogout}>Sign out</DropdownItem>
 						</Dropdown>
 					</div>
