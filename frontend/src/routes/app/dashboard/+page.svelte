@@ -1,18 +1,10 @@
 <script lang="ts">
-	import { Card, Heading, Select, Button, Toast } from 'flowbite-svelte';
+	import { Button, Card, Heading, Toast } from 'flowbite-svelte';
 	import { files } from '$lib/stores/files';
 	import { categories } from '$lib/stores/categories';
 	import Icon from '@iconify/svelte';
 	import ChartSplitCategories from './chartSplitCategories.svelte';
 	import ClassicExpensesOverview from './classicExpensesOverview.svelte';
-
-	let selectedPeriod: 'day' | 'week' | 'month' | 'year' = 'month';
-	const periodOptions = [
-		{ value: 'day', name: 'Today' },
-		{ value: 'week', name: 'This Week' },
-		{ value: 'month', name: 'This Month' },
-		{ value: 'year', name: 'This Year' }
-	];
 
 	let showDefaultCategoryToast = false;
 
@@ -33,60 +25,67 @@
 </script>
 
 <div class="container mx-auto px-4 py-8">
-	<div class="flex justify-between items-center mb-8">
+	<div class="mb-8">
 		<Heading tag="h1" class="text-3xl font-bold">Expensy Dashboard</Heading>
-		<Select class="w-40" bind:value={selectedPeriod} items={periodOptions} />
 	</div>
 
 	<div class="grid md:grid-cols-2 gap-6 mb-8">
 		<Card>
-			<ChartSplitCategories {selectedPeriod} />
+			<ChartSplitCategories />
 		</Card>
 		<Card>
 			<ClassicExpensesOverview />
 		</Card>
 	</div>
 
-	<div class="grid md:grid-cols-2 gap-6 mt-8">
+	<div class="grid md:grid-cols-2 gap-8 mt-8 px-6">
 		<!-- Categories Card -->
 		<Card>
-			<div class="flex justify-between items-center mb-4">
+			<div class="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
 				<Heading tag="h2" class="text-xl">Categories</Heading>
 			</div>
-			<div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+			<div class="grid grid-cols-2 sm:grid-cols-3 gap-6 max-h-[500px] overflow-y-auto pr-2 
+						scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
 				{#each $categories.items as category}
-					<div class="flex items-center justify-between p-3 rounded-lg border">
-						<div class="flex items-center gap-3">
-							<div
-								class="w-10 h-10 rounded-full flex items-center justify-center"
-								style:background-color={'#' + category.color + '33'}>
-								<Icon icon={category.id_icon} class="w-5 h-5" />
-							</div>
-							<span class="font-medium">{category.name}</span>
+					<div class="flex flex-col items-center p-4 rounded-lg border hover:shadow-md transition-shadow">
+						<div 
+							class="w-12 h-12 rounded-full flex items-center justify-center mb-2"
+							style:background-color={'#' + category.color + '33'}>
+							<Icon icon={category.id_icon} class="w-6 h-6" />
 						</div>
+						<span class="font-medium text-center min-h-[2.5rem] flex items-center text-sm">
+							{category.name}
+						</span>
 						<Button
 							size="xs"
 							color="red"
-							class="!p-2"
-							on:click={() => handleCategoryDelete(category.id_category)}>
-							<Icon icon="bi:trash" class="w-4 h-4" />
+							class="!p-1 mt-2"
+							on:click={() => handleCategoryDelete(category.id_category)}
+						>
+							<Icon icon="bi:trash" class="w-3 h-3" />
 						</Button>
 					</div>
 				{/each}
 			</div>
 		</Card>
-
+	
 		<!-- Files Card -->
 		<Card>
-			<div class="flex justify-between items-center mb-4">
+			<div class="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
 				<Heading tag="h2" class="text-xl">Files</Heading>
 			</div>
-			<div class="divide-y">
+			<div class="divide-y max-h-[500px] overflow-y-auto pr-2
+						scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
 				{#each $files.items as file}
-					<div class="flex items-center justify-between py-3">
-						<span class="truncate">{file.filename}</span>
-						<Button size="xs" color="red" class="!p-2" on:click={() => handleFileDelete(file.id!)}>
-							<Icon icon="bi:trash" class="w-4 h-4" />
+					<div class="flex items-center justify-between py-4 px-2">
+						<span class="truncate flex-1 mr-4">{file.filename}</span>
+						<Button
+							size="xs"
+							color="red"
+							class="!p-1"
+							on:click={() => handleFileDelete(file.id!)}
+						>
+							<Icon icon="bi:trash" class="w-3 h-3" />
 						</Button>
 					</div>
 				{/each}

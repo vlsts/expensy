@@ -74,7 +74,7 @@
 				<div class="flex items-center space-x-4">
 					<span class="font-semibold">
 						{expense.amount.toFixed(2)}
-						{expense.id_currency}
+						<!-- {expense.id_currency} -->
 					</span>
 					<Button color="light" class="p-2" on:click={() => viewExpense(expense.id_expense)}>
 						<EyeOutline class="w-4 h-4" />
