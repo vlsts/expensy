@@ -3,15 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { File, FileDocument } from './files.schema';
 import { CreateFileDto } from './dto/create-file.dto';
-import { CreateExpenseDto } from 'src/expenses/dto/create-expense.dto';
-import { ExpensesService } from 'src/expenses/expenses.service';
-import { CurrenciesService } from 'src/currencies/currencies.service';
+import { CreateExpenseDto } from '../expenses/dto/create-expense.dto';
+import { ExpensesService } from '../expenses/expenses.service';
+import { CurrenciesService } from '../currencies/currencies.service';
 import { RegexpTokenizer } from 'natural';
 import { promises as fs } from 'fs';
 import { GetFileDto } from './dto/get-file.dto';
 import { HfInference } from '@huggingface/inference';
 import { ConfigService } from '@nestjs/config';
-import { CategoriesService } from 'src/categories/categories.service';
+import { CategoriesService } from '../categories/categories.service';
 
 let Tesseract = require('tesseract.js');
 let natural = require('natural');
@@ -142,19 +142,15 @@ export class FilesService {
         return symbol.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    async extractWordsUntilSymbol(
-        input: string,
-        symbol: string,
-    ): Promise<string> {
-        const escapedSymbol = this.escapeRegExp(symbol);
+    async extractWordsUntilSymbol(input: string, symbol: string): Promise<string> {
+        const escapedSymbol = await this.escapeRegExp(symbol);
 
-        const regex = new RegExp(`(.*?)${escapedSymbol}`, 's');
+        const regex = new RegExp(`^(.*?)${escapedSymbol}`, 's');
 
         const match = input.match(regex);
 
-        if (match) {
-            const words: string = match[1].trim().split(/\s+/).join(' ');
-            return words;
+        if (match && match[1]) {
+            return match[1].trim().replace(/\s+/g, ' ');
         }
 
         return '';

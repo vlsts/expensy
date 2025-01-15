@@ -15,7 +15,7 @@ import { Response } from 'express';
 import { FilesService } from './files.service';
 import { CreateFileDto } from './dto/create-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 import { GetFileDto } from './dto/get-file.dto';
 
 @UseGuards(AuthGuard)
