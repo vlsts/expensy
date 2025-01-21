@@ -84,5 +84,5 @@ resource "digitalocean_record" "corbado_auth" {
   domain = digitalocean_domain.domain.name
   type   = "CNAME"
   name   = "auth"
-  value  = var.corbado_auth
+  value  = "${var.corbado_auth}."
 }
