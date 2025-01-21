@@ -19,6 +19,7 @@ module "domain" {
   frontend_ipv6 = module.vm.frontend_ipv6
   backend_ipv4  = module.vm.backend_ipv4
   backend_ipv6  = module.vm.backend_ipv6
+  corbado_auth  = var.corbado_auth
 }
 
 resource "digitalocean_project_resources" "project_resources" {

@@ -4,55 +4,56 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: 'Action to perform'
+        description: "Action to perform"
         required: true
         type: choice
-        default: 'apply'
+        default: "apply"
         options:
-          - 'apply'
-          - 'destroy'
+          - "apply"
+          - "destroy"
 
 jobs:
-    terraform:
-        runs-on: ubuntu-latest
-        name: Terraform ${{ github.event.inputs.action }}
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v4
-    
-          - name: Setup Terraform
-            uses: hashicorp/setup-terraform@v3.1.2
+  terraform:
+    runs-on: ubuntu-latest
+    name: Terraform ${{ github.event.inputs.action }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-          - name: Write public SSH Key
-            working-directory: terraform
-            run: |
-              echo "${{ secrets.DIGITALOCEAN_SSH_KEY_PUBLIC }}" > ./login.pub
-              chmod 600 ./login.pub
-    
-          - name: Terraform ${{ github.event.inputs.action }}
-            working-directory: terraform
-            env:
-                TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
-                AWS_ACCESS_KEY_ID: ${{ secrets.DIGITALOCEAN_ACCESS_KEY }}
-                AWS_SECRET_ACCESS_KEY: ${{ secrets.DIGITALOCEAN_SECRET_KEY }}
-            run: |
-                terraform init
-                terraform ${{ github.event.inputs.action }} -auto-approve
-          
-          - name: Add MongoDB password as secret
-            if: ${{ github.event.inputs.action == 'apply' }}
-            working-directory: terraform
-            env:
-              TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
-              AWS_ACCESS_KEY_ID: ${{ secrets.DIGITALOCEAN_ACCESS_KEY }}
-              AWS_SECRET_ACCESS_KEY: ${{ secrets.DIGITALOCEAN_SECRET_KEY }}
-            run: |
-              sudo apt update
-              sudo apt install -y gh
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3.1.2
 
-              MONGODB_PASSWORD=$(terraform output -raw mongodb_password)
-              MONGODB_HOST=$(terraform output -raw mongodb_host)
-              
-              echo "${{ secrets.GH_TOKEN }}" | gh auth login --with-token
-              echo "$MONGODB_PASSWORD" | gh secret set MONGODB_PASSWORD
-              echo "$MONGODB_HOST" | gh secret set MONGODB_HOST
+      - name: Write public SSH Key
+        working-directory: terraform
+        run: |
+          echo "${{ secrets.DIGITALOCEAN_SSH_KEY_PUBLIC }}" > ./login.pub
+          chmod 600 ./login.pub
+
+      - name: Terraform ${{ github.event.inputs.action }}
+        working-directory: terraform
+        env:
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.DIGITALOCEAN_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DIGITALOCEAN_SECRET_KEY }}
+          TF_VAR_corbado_auth: ${{ secrets.FRONTEND_API }}
+        run: |
+          terraform init
+          terraform ${{ github.event.inputs.action }} -auto-approve
+
+      - name: Add MongoDB password as secret
+        if: ${{ github.event.inputs.action == 'apply' }}
+        working-directory: terraform
+        env:
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.DIGITALOCEAN_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DIGITALOCEAN_SECRET_KEY }}
+        run: |
+          sudo apt update
+          sudo apt install -y gh
+
+          MONGODB_PASSWORD=$(terraform output -raw mongodb_password)
+          MONGODB_HOST=$(terraform output -raw mongodb_host)
+
+          echo "${{ secrets.GH_TOKEN }}" | gh auth login --with-token
+          echo "$MONGODB_PASSWORD" | gh secret set MONGODB_PASSWORD
+          echo "$MONGODB_HOST" | gh secret set MONGODB_HOST

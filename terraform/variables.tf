@@ -7,3 +7,8 @@ variable "domain" {
   description = "The domain name"
   type        = string
 }
+
+variable "corbado_auth" {
+  description = "The Corbado Auth link"
+  type        = string
+}

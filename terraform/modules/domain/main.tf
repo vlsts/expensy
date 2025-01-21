@@ -79,3 +79,10 @@ resource "digitalocean_record" "purelymail_dmarc" {
   name   = "_dmarc"
   value  = "dmarcroot.purelymail.com."
 }
+
+resource "digitalocean_record" "corbado_auth" {
+  domain = digitalocean_domain.domain.name
+  type   = "CNAME"
+  name   = "auth"
+  value  = var.corbado_auth
+}

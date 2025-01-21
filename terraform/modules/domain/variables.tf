@@ -22,3 +22,8 @@ variable "backend_ipv6" {
   description = "The backend IPv6 address"
   type        = string
 }
+
+variable "corbado_auth" {
+  description = "The Corbado Auth link"
+  type        = string
+}
