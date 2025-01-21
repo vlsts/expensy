@@ -35,7 +35,7 @@ jobs:
           TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.DIGITALOCEAN_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DIGITALOCEAN_SECRET_KEY }}
-          TF_VAR_corbado_auth: ${{ secrets.FRONTEND_API }}
+          TF_VAR_corbado_auth: ${{ secrets.CORBADO_FRONTEND_CNAME }}
         run: |
           terraform init
           terraform ${{ github.event.inputs.action }} -auto-approve
@@ -47,7 +47,7 @@ jobs:
           TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.DIGITALOCEAN_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DIGITALOCEAN_SECRET_KEY }}
-          TF_VAR_corbado_auth: ${{ secrets.FRONTEND_API }}
+          TF_VAR_corbado_auth: ${{ secrets.CORBADO_FRONTEND_CNAME }}
         run: |
           sudo apt update
           sudo apt install -y gh
