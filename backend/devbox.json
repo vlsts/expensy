@@ -1,7 +1,0 @@
-{
-    "name": "Expensy Shell - Backend",
-    "packages": [
-        "bun@1.1.34",
-        "nodejs@22.10.0"
-    ]
-}

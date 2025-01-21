@@ -1,0 +1,10 @@
+{
+  "name": "Expensy Developer Environment",
+  "packages": [
+    "bun@latest",
+    "nodejs@22.10.0",
+    "git@latest",
+    "gradle@latest",
+    "jdk@23"
+  ]
+}
