@@ -20,7 +20,7 @@
 				Track expenses, manage budgets, and gain financial insights with our intuitive expense
 				manager.
 			</p>
-			<Button size="xl" color="purple" href="/app">Get Started</Button>
+			<Button size="xl" color="purple" href="/app/dashboard">Get Started</Button>
 		</div>
 	</div>
 </section>
