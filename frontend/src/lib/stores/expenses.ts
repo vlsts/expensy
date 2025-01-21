@@ -1,6 +1,7 @@
 import { writable, type Writable } from 'svelte/store';
 import { PUBLIC_BACKEND_URL } from '$env/static/public';
 import type { Expense } from '$lib/types/api.types';
+import Corbado from '@corbado/web-js';
 
 interface ExpensesState {
     items: Expense[];
@@ -24,6 +25,9 @@ class ExpensesStore implements Writable<ExpensesState> {
         options: RequestInit = {}
     ): Promise<T> {
         const response = await fetch(`${PUBLIC_BACKEND_URL}${url}`, {
+            headers: {
+                'Authorization': `Bearer ${Corbado.sessionToken}`
+            },
             ...options,
             credentials: 'include'
         });
