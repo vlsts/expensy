@@ -1,5 +1,4 @@
 .devbox
-*.lock
-*.lockb
 login
 login.pub
+/gradle.properties
