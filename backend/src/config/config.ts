@@ -9,4 +9,5 @@ export default () => ({
     PROJECT_ID: process.env.PROJECT_ID,
     BACKEND_API: process.env.BACKEND_API,
     HUGGINGFACE_API_KEY: process.env.HUGGINGFACE_API_KEY,
+    FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173'
 });
