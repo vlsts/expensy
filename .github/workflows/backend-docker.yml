@@ -84,7 +84,7 @@ jobs:
               -e FRONTEND_API=${{secrets.FRONTEND_API}} \
               -e PROJECT_ID=${{secrets.PROJECT_ID}} \
               -e BACKEND_API=${{secrets.BACKEND_API}} \
-              -e FRONTEND_URL=${{secrets.PUBLIC_FRONTEND_URL}} \
+              -e FRONTEND_URL=${{secrets.FRONTEND_URL}} \
               ghcr.io/vlsts/expensy-backend:latest
 
       - name: Make Configs folder
