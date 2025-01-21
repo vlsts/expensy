@@ -53,6 +53,7 @@ jobs:
             PUBLIC_CORBADO_PROJECT_ID=${{ secrets.PROJECT_ID }}
             PUBLIC_CORBADO_SUPPORT_MAIL=${{ secrets.CONTACT_MAIL }}
             PUBLIC_BACKEND_URL=${{ secrets.PUBLIC_BACKEND_URL }}
+            PUBLIC_CORBADO_AUTH_URL=${{ secrets.PUBLIC_CORBADO_AUTH_URL }}
           labels: |
             org.opencontainers.image.source=https://github.com/vlsts/expensy
             org.opencontainers.image.url=https://github.com/vlsts/expensy

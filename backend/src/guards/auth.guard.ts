@@ -12,7 +12,9 @@ export class AuthGuard implements CanActivate {
     constructor(private configService: ConfigService) {
         const projectID = this.configService.get<string>('PROJECT_ID');
         const apiSecret = this.configService.get<string>('CORBADO_API');
-        const frontendAPI = this.configService.get<string>('FRONTEND_API');
+        const frontendAPI = this.configService.get<string>(
+            'CORBADO_FRONTEND_URL',
+        );
         const backendAPI = this.configService.get<string>('BACKEND_API');
 
         const config = new Config(
@@ -45,12 +47,12 @@ export class AuthGuard implements CanActivate {
         if (authHeader) {
             return authHeader.split(' ')[1];
         }
-    
+
         // Check Corbado cookies
         const cookies = request.cookies;
-        return cookies['cbo_short_session'] || 
-               cookies['cbo_session_token'] || 
-               null;
+        return (
+            cookies['cbo_short_session'] || cookies['cbo_session_token'] || null
+        );
     }
 
     async validateRequest(request): Promise<null | string> {
@@ -59,7 +61,7 @@ export class AuthGuard implements CanActivate {
         if (!sessionToken) {
             return null;
         }
-    
+
         try {
             const user = await this.sdk.sessions().validateToken(sessionToken);
             console.log(`User with ID ${user.userId} is authenticated!`);

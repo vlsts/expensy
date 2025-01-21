@@ -4,7 +4,11 @@
 	import { onMount } from 'svelte';
 	import '../app.css';
 	let { children } = $props();
-	import { PUBLIC_CORBADO_PROJECT_ID, PUBLIC_CORBADO_SUPPORT_MAIL } from '$env/static/public';
+	import {
+		PUBLIC_CORBADO_PROJECT_ID,
+		PUBLIC_CORBADO_SUPPORT_MAIL,
+		PUBLIC_CORBADO_AUTH_URL
+	} from '$env/static/public';
 	import {
 		Navbar,
 		NavBrand,
@@ -33,7 +37,7 @@
 			projectId: PUBLIC_CORBADO_PROJECT_ID,
 			customerSupportEmail: PUBLIC_CORBADO_SUPPORT_MAIL,
 			darkMode: 'auto',
-			isDevMode: true
+			frontendApiUrl: PUBLIC_CORBADO_AUTH_URL
 		});
 		$isCorbadoLoaded = true;
 		$isLoggedIn = Corbado.isAuthenticated || false;
