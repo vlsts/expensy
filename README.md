@@ -1,6 +1,19 @@
 # ?
 `Expensy` is a team project currently in development for the SPS 2024-2025 (**S**abloane de **P**roiectare **S**oftware) course held at Transilvania University of Brasov's [Faculty of Mathematics and Computer Science](https://mateinfo.unitbv.ro) (study programme: Computer Science).
 
+[![Built with Devbox](https://www.jetify.com/img/devbox/shield_moon.svg)](https://www.jetify.com/devbox/docs/contributor-quickstart/)
+![Svelte](https://img.shields.io/badge/Svelte-4A4A55?logo=svelte&logoColor=FF3E00)
+![Docker](https://img.shields.io/badge/Docker-%230db7ed.svg?logo=docker&logoColor=white)
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=white)
+![Terraform](https://img.shields.io/badge/Terraform-%235835CC.svg?&logo=terraform&logoColor=white)
+![Github Actions](https://img.shields.io/badge/Github_Actions-2088FF?logo=github-actions&logoColor=white)
+![Bun](https://img.shields.io/badge/Bun-4A4A55?logo=bun&logoColor=ffe4e1)
+![DigitalOcean](https://img.shields.io/badge/Digital_Ocean-0080FF?logo=DigitalOcean&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?logo=mongodb&logoColor=white)
+![Corbado](https://img.shields.io/badge/Corbado-ffffff?logo=keepassxc&logoColor=black)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?logo=tailwind-css&logoColor=white)
+
+
 # 📜 Description
 `Expensy` is an expense manager that aims to make it easier to keep the user's transactional habits under control by offering a transaction monitoring platform.
 
