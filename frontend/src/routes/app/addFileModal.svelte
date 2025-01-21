@@ -10,12 +10,21 @@
 
 	async function handleSubmit() {
 		if (!selectedFile) return;
+		if (selectedFile.length === 0) {
+			error = 'Please select a file to upload';
+			return;
+		}
+
+		const file = selectedFile.item(0)!;
 
 		try {
 			uploading = true;
 			error = null;
-			// todo: check errors
-			await files.uploadFile(selectedFile.item(0), doOCR);
+			await files.uploadFile(file, {
+				filename: file.name,
+				mime_type: file.type,
+				doOCR
+			});
 			await files.fetchFiles();
 
 			open = false;

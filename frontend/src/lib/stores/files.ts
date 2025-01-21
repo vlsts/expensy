@@ -1,8 +1,9 @@
-import { writable, get } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
 import { PUBLIC_BACKEND_URL } from '$env/static/public';
-import type {  } from '$lib/types/api.types';
+import type { File as FileAPI } from '$lib/types/api.types';
+
 interface FilesState {
-    items: File[];
+    items: FileAPI[];
     loading: boolean;
     error: string | null;
 }
@@ -13,71 +14,96 @@ interface FileMetadata {
     doOCR: boolean;
 }
 
-function createFilesStore() {
-    const { subscribe, set, update } = writable<FilesState>({
+class FilesStore implements Writable<FilesState> {
+    private readonly store = writable<FilesState>({
         items: [],
         loading: false,
         error: null
     });
 
-    return {
-        subscribe,
-        fetchFiles: async () => {
-            update(currentState => ({ ...currentState, loading: true, error: null }));
-            try {
-                const response = await fetch(`${PUBLIC_BACKEND_URL}/files`, {
-                    credentials: 'include'
-                });
-                if (!response.ok) throw new Error('Failed to fetch file');
-                
-                const files: File[] = await response.json();
-                
-                update(currentState => ({
-                    ...currentState,
-                    items: files,
-                    loading: false
-                }));
-            } catch (error) {
-                update(currentState => ({
-                    ...currentState,
-                    error: error instanceof Error ? error.message : 'Unknown error',
-                    loading: false
-                }));
-            }
-        },
-        uploadFile: async (file: File, doOCR: boolean) => {
-            update(state => ({ ...state, loading: true, error: null }));
-            
+    readonly subscribe = this.store.subscribe;
+    readonly set = this.store.set;
+    readonly update = this.store.update;
+
+    private async apiCall<T>(
+        url: string, 
+        options: RequestInit = {}
+    ): Promise<T> {
+        const response = await fetch(`${PUBLIC_BACKEND_URL}${url}`, {
+            ...options,
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error(`API call failed: ${response.statusText}`);
+        }
+
+        return response.json();
+    }
+
+    private updateState(partial: Partial<FilesState>) {
+        this.update(state => ({ ...state, ...partial }));
+    }
+
+    async fetchFiles() {
+        this.updateState({ loading: true, error: null });
+        try {
+            const files = await this.apiCall<FileAPI[]>('/files');
+            this.updateState({ items: files, loading: false });
+        } catch (error) {
+            this.updateState({ 
+                error: error instanceof Error ? error.message : 'Unknown error',
+                loading: false 
+            });
+        }
+    }
+
+    async uploadFile(file: globalThis.File, metadata: FileMetadata) {
+        this.updateState({ loading: true, error: null });
+        try {
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('createFileDto', JSON.stringify({
-                filename: file.name,
-                mime_type: file.type,
-                doOCR
-            }));
-            
-            try {
-                const response = await fetch(`${PUBLIC_BACKEND_URL}/files/upload`, {
-                    method: 'POST',
-                    credentials: 'include',
-                    // Don't set Content-Type header, browser will set it automatically with boundary
-                    body: formData
-                });
+            formData.append('createFileDto', JSON.stringify(metadata));
 
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.message || 'Upload failed');
-                }
-            } catch (error) {
-                update(state => ({
-                    ...state,
-                    error: error instanceof Error ? error.message : 'Unknown error',
-                    loading: false
-                }));
-                throw error;
-            }
+            const uploadedFile = await this.apiCall<FileAPI>('/files/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            this.update(state => ({
+                ...state,
+                items: [...state.items, uploadedFile],
+                loading: false
+            }));
+
+            return uploadedFile;
+        } catch (error) {
+            this.updateState({ 
+                error: error instanceof Error ? error.message : 'Unknown error',
+                loading: false 
+            });
+            throw error;
         }
-    };
+    }
+
+    async deleteFile(id: string) {
+        this.updateState({ loading: true, error: null });
+        try {
+            await this.apiCall(`/files/${id}`, { method: 'DELETE' });
+            
+            this.update(state => ({
+                ...state,
+                items: state.items.filter(item => item.id !== id),
+                loading: false
+            }));
+        } catch (error) {
+            this.updateState({ 
+                error: error instanceof Error ? error.message : 'Unknown error',
+                loading: false 
+            });
+            throw error;
+        }
+    }
 }
 
-export const files = createFilesStore();
+export const files = new FilesStore();

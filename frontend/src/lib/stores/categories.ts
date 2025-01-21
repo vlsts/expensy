@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
 import { PUBLIC_BACKEND_URL } from '$env/static/public';
 import type { Category } from '$lib/types/api.types';
 
@@ -8,43 +8,93 @@ interface CategoriesState {
     error: string | null;
 }
 
-function createCategoriesStore() {
-    const { subscribe, set, update } = writable<CategoriesState>({
+class CategoriesStore implements Writable<CategoriesState> {
+    private readonly store = writable<CategoriesState>({
         items: [],
         loading: false,
         error: null
     });
 
-    return {
-        subscribe,
-        fetchCategories: async () => {
-            update(state => ({ ...state, loading: true, error: null }));
-            try {
-                const response = await fetch(`${PUBLIC_BACKEND_URL}/categories`, {
-                    credentials: 'include'
-                });
-                if (!response.ok) throw new Error('Failed to fetch categories');
-                const data = await response.json();
-                update(state => ({ ...state, items: data, loading: false }));
-            } catch (error) {
-                update(state => ({ ...state, error: error?.message, loading: false }));
-            }
-        },
-        createCategory: async (category: Omit<Category, 'id_category'>) => {
-            update(state => ({ ...state, loading: true, error: null }));
-            try {
-                const response = await fetch(`${PUBLIC_BACKEND_URL}/categories`, {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(category)
-                });
-                if (!response.ok) throw new Error('Failed to create category');
-            } catch (error) {
-                update(state => ({ ...state, error: error?.message, loading: false }));
-            }
+    readonly subscribe = this.store.subscribe;
+    readonly set = this.store.set;
+    readonly update = this.store.update;
+
+    private async apiCall<T>(
+        url: string, 
+        options: RequestInit = {}
+    ): Promise<T> {
+        const response = await fetch(`${PUBLIC_BACKEND_URL}${url}`, {
+            ...options,
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error(`API call failed: ${response.statusText}`);
         }
-    };
+
+        return response.json();
+    }
+
+    private updateState(partial: Partial<CategoriesState>) {
+        this.update(state => ({ ...state, ...partial }));
+    }
+
+    async fetchCategories() {
+        this.updateState({ loading: true, error: null });
+        try {
+            const categories = await this.apiCall<Category[]>('/categories');
+            this.updateState({ items: categories, loading: false });
+        } catch (error) {
+            this.updateState({ 
+                error: error instanceof Error ? error.message : 'Unknown error',
+                loading: false 
+            });
+        }
+    }
+
+    async createCategory(category: Omit<Category, 'id_category'>) {
+        this.updateState({ loading: true, error: null });
+        try {
+            const created = await this.apiCall<Category>('/categories', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(category)
+            });
+
+            this.update(state => ({
+                ...state,
+                items: [...state.items, created],
+                loading: false
+            }));
+
+            return created;
+        } catch (error) {
+            this.updateState({ 
+                error: error instanceof Error ? error.message : 'Unknown error',
+                loading: false 
+            });
+            throw error;
+        }
+    }
+
+    async deleteCategory(id: string) {
+        this.updateState({ loading: true, error: null });
+        try {
+            await this.apiCall(`/categories/${id}`, { method: 'DELETE' });
+            
+            this.update(state => ({
+                ...state,
+                items: state.items.filter(item => item.id_category !== id),
+                loading: false
+            }));
+        } catch (error) {
+            this.updateState({ 
+                error: error instanceof Error ? error.message : 'Unknown error',
+                loading: false 
+            });
+            throw error;
+        }
+    }
 }
 
-export const categories = createCategoriesStore();
+export const categories = new CategoriesStore();

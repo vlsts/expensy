@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
 import { PUBLIC_BACKEND_URL } from '$env/static/public';
 import type { Currency } from '$lib/types/api.types';
 
@@ -8,29 +8,49 @@ interface CurrenciesState {
     error: string | null;
 }
 
-function createFilesStore() {
-    const { subscribe, set, update } = writable<CurrenciesState>({
+class CurrenciesStore implements Writable<CurrenciesState> {
+    private readonly store = writable<CurrenciesState>({
         items: [],
         loading: false,
         error: null
     });
 
-    return {
-        subscribe,
-        fetchCurrencies: async () => {
-            update(state => ({ ...state, loading: true, error: null }));
-            try {
-                const response = await fetch(`${PUBLIC_BACKEND_URL}/currencies`, {
-                    credentials: 'include'
-                });
-                if (!response.ok) throw new Error('Failed to fetch curencies');
-                const data = await response.json();
-                update(state => ({ ...state, items: data, loading: false }));
-            } catch (error) {
-                update(state => ({ ...state, error: error?.message, loading: false }));
-            }
+    readonly subscribe = this.store.subscribe;
+    readonly set = this.store.set;
+    readonly update = this.store.update;
+
+    private async apiCall<T>(
+        url: string, 
+        options: RequestInit = {}
+    ): Promise<T> {
+        const response = await fetch(`${PUBLIC_BACKEND_URL}${url}`, {
+            ...options,
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error(`API call failed: ${response.statusText}`);
         }
-    };
+
+        return response.json();
+    }
+
+    private updateState(partial: Partial<CurrenciesState>) {
+        this.update(state => ({ ...state, ...partial }));
+    }
+
+    async fetchCurrencies() {
+        this.updateState({ loading: true, error: null });
+        try {
+            const data = await this.apiCall<Currency[]>('/currencies');
+            this.updateState({ items: data, loading: false });
+        } catch (error) {
+            this.updateState({ 
+                error: error instanceof Error ? error.message : 'Unknown error',
+                loading: false 
+            });
+        }
+    }
 }
 
-export const currencies = createFilesStore();
+export const currencies = new CurrenciesStore();
