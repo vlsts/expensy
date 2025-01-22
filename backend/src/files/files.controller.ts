@@ -13,10 +13,9 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { FilesService } from './files.service';
-import { CreateFileDto } from './dto/create-file.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../guards/auth.guard';
-import { GetFileDto } from './dto/get-file.dto';
+import { CreateFileDTO, GetFileDTO } from './files.schema';
 
 @UseGuards(AuthGuard)
 @Controller('files')
@@ -24,7 +23,7 @@ export class FilesController {
     constructor(private readonly filesService: FilesService) {}
 
     @Get()
-    async findAll(@Request() request): Promise<GetFileDto[]> {
+    async findAll(@Request() request): Promise<GetFileDTO[]> {
         return await this.filesService.findAll(request.userId);
     }
 
@@ -63,13 +62,10 @@ export class FilesController {
         @Request() request,
     ) {
         try {
-            // Parse the JSON string into CreateFileDto
-            const createFileDto: CreateFileDto = JSON.parse(body.createFileDto);
+            const createFileDto: CreateFileDTO = JSON.parse(body.createFileDto);
 
-            // Override mime_type with actual file mimetype
             createFileDto.mime_type = file.mimetype;
 
-            // Create file and return the result
             const result = await this.filesService.create(
                 createFileDto,
                 file.buffer,

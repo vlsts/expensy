@@ -1,17 +1,15 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { File, FileDocument } from './files.schema';
-import { CreateFileDto } from './dto/create-file.dto';
-import { CreateExpenseDto } from '../expenses/dto/create-expense.dto';
+import { CreateFileDTO, File, FileDocument, GetFileDTO } from './files.schema';
 import { ExpensesService } from '../expenses/expenses.service';
 import { CurrenciesService } from '../currencies/currencies.service';
 import { RegexpTokenizer } from 'natural';
 import { promises as fs } from 'fs';
-import { GetFileDto } from './dto/get-file.dto';
 import { HfInference } from '@huggingface/inference';
 import { ConfigService } from '@nestjs/config';
 import { CategoriesService } from '../categories/categories.service';
+import { ExpenseDTO } from '../expenses/expenses.schema';
 
 let Tesseract = require('tesseract.js');
 let natural = require('natural');
@@ -27,7 +25,7 @@ export class FilesService {
     ) {}
 
     async create(
-        createFileDto: CreateFileDto,
+        createFileDto: CreateFileDTO,
         fileBuffer: Buffer,
         size: number,
         userId: string,
@@ -42,7 +40,7 @@ export class FilesService {
         newFile.save();
 
         if (createFileDto.doOCR) {
-            const addedExpenses: CreateExpenseDto[] = await this.doOCR(
+            const addedExpenses: Omit<ExpenseDTO, 'id_expense' | 'id_user'>[] = await this.doOCR(
                 fileBuffer,
                 newFile.filename,
             );
@@ -51,7 +49,7 @@ export class FilesService {
         }
     }
 
-    async findAll(userId: string): Promise<GetFileDto[]> {
+    async findAll(userId: string): Promise<GetFileDTO[]> {
         let files = await this.fileModel
             .find({
                 id_user: userId,
@@ -59,7 +57,7 @@ export class FilesService {
             .exec();
 
         return files.map((f) => ({
-            id: f._id.toString(),
+            id_file: f._id.toString(),
             filename: f.filename,
             size: f.size,
             mime_type: f.mime_type,
@@ -201,7 +199,7 @@ export class FilesService {
         }
     }
 
-    async doOCR(data: Buffer, filename: string): Promise<CreateExpenseDto[]> {
+    async doOCR(data: Buffer, filename: string): Promise<Omit<ExpenseDTO, 'id_expense' | 'id_user'>[]> {
         let recog = await Tesseract.recognize(data, 'eng');
         let resultedText = recog.data.text;
 
@@ -236,7 +234,7 @@ export class FilesService {
 
         const uploadedFile: File = await this.findFileByFilename(filename);
 
-        let addedExpenses: CreateExpenseDto[] = [];
+        let addedExpenses: Omit<ExpenseDTO, 'id_expense' | 'id_user'>[] = [];
         let expenseNumber: number = 0;
         let index: number = 0;
 
@@ -261,7 +259,7 @@ export class FilesService {
                     ? 'General'
                     : await this.classifyExpense(expenseObject);
 
-            let expenseToAdd: CreateExpenseDto = new CreateExpenseDto();
+            let expenseToAdd: Omit<ExpenseDTO, 'id_expense' | 'id_user'>;
             let amounts = await this.extractNumbers(resultedTextParts[index]);
             expenseToAdd.name = expenseObject + expenseNumber;
             expenseToAdd.amount = amounts[amounts.length - 1];
@@ -270,7 +268,7 @@ export class FilesService {
             expenseToAdd.id_files = [await this.getFileID(filename)];
             expenseToAdd.id_currency =
                 await this.currencyService.getCurrencyID(currencyName);
-            expenseToAdd.date = new Date().toString();
+            expenseToAdd.date = new Date();
 
             this.expenseService.create(expenseToAdd, uploadedFile.id_user);
 
