@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateFileDTO, File, FileDocument, GetFileDTO } from './files.schema';
@@ -279,5 +279,31 @@ export class FilesService {
         }
 
         return addedExpenses;
+    }
+
+    async delete(id: string, userId: string): Promise<void> {
+        const findResult = await this.fileModel.findById(id);
+
+        if (!findResult) {
+            throw new NotFoundException(`File with ID ${id} not found`);
+        }
+
+        if (findResult.id_user !== userId) {
+            throw new BadRequestException(
+                'This file was not uploaded by you!',
+            );
+        }
+
+        await this.fileModel.findByIdAndDelete(id);
+
+        const expenses = (await this.expenseService.getAll(userId));
+
+        expenses.forEach(element => {
+            if(element.id_files.includes(id)) {
+                element.id_files.filter(id_file => id_file !== id);
+            };
+
+            this.fileModel.findByIdAndUpdate(element.id_expense, element);
+        });
     }
 }

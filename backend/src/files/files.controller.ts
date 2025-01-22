@@ -10,6 +10,7 @@ import {
     UseGuards,
     Request,
     BadRequestException,
+    Delete,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { FilesService } from './files.service';
@@ -80,5 +81,10 @@ export class FilesController {
             }
             throw error;
         }
+    }
+
+    @Delete(':id')
+    async delete(@Param('id') id: string, @Request() request): Promise<void> {
+        return this.filesService.delete(id, request.userId);
     }
 }
