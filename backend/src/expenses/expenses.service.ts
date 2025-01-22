@@ -5,10 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Expense, ExpenseDocument } from './expenses.schema';
-import { CreateExpenseDto } from './dto/create-expense.dto';
-import { UpdateExpenseDto } from './dto/update-expense.dto';
-import { GetExpenseDto } from './dto/get-expense.dto';
+import { ExpenseDTO, Expense, ExpenseDocument } from './expenses.schema';
 
 @Injectable()
 export class ExpensesService {
@@ -17,22 +14,34 @@ export class ExpensesService {
     ) {}
 
     async create(
-        createExpenseDto: CreateExpenseDto,
+        createExpenseDto: Omit<ExpenseDTO, 'id_expense' | 'id_user'>,
         userId: string,
     ): Promise<Expense> {
         const newExpense = new this.expenseModel({
             ...createExpenseDto,
             id_user: userId,
         });
-        return newExpense.save();
+
+        const intermediateExpense = await newExpense.save();
+
+        return {
+            name: intermediateExpense.name,
+            amount: intermediateExpense.amount,
+            id_currency: intermediateExpense.id_currency,
+            description: intermediateExpense.description,
+            id_files: intermediateExpense.id_files,
+            id_category: intermediateExpense.id_category,
+            date: intermediateExpense.date,
+            id_user: intermediateExpense.id_user,
+        }
     }
 
-    async getAll(userId: string): Promise<GetExpenseDto[]> {
+    async getAll(userId: string): Promise<Omit<ExpenseDTO, 'id_user'>[]> {
         let expenses: ExpenseDocument[] = await this.expenseModel.find({
             id_user: userId,
         });
 
-        let expensesDTO: GetExpenseDto[];
+        let expensesDTO: Omit<ExpenseDTO, 'id_user'>[];
 
         expensesDTO = expenses.map((expense) => {
             return {
@@ -52,7 +61,7 @@ export class ExpensesService {
 
     async update(
         id: string,
-        updateExpenseDto: UpdateExpenseDto,
+        updateExpenseDto: Partial<ExpenseDTO>
     ): Promise<Expense> {
         const updatedExpense = await this.expenseModel.findByIdAndUpdate(
             id,

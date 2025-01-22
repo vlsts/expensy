@@ -10,11 +10,8 @@ import {
     Request,
 } from '@nestjs/common';
 import { ExpensesService } from './expenses.service';
-import { CreateExpenseDto } from './dto/create-expense.dto';
-import { Expense } from './expenses.schema';
-import { UpdateExpenseDto } from './dto/update-expense.dto';
+import { ExpenseDTO, Expense } from './expenses.schema';
 import { AuthGuard } from '../guards/auth.guard';
-import { GetExpenseDto } from './dto/get-expense.dto';
 
 @UseGuards(AuthGuard)
 @Controller('expenses')
@@ -22,21 +19,21 @@ export class ExpensesController {
     constructor(private readonly expenseService: ExpensesService) {}
 
     @Get()
-    async findAll(@Request() request): Promise<GetExpenseDto[]> {
+    async findAll(@Request() request): Promise<Omit<ExpenseDTO, 'id_user'>[]> {
         const expenses = await this.expenseService.getAll(request.userId);
 
         return expenses;
     }
 
     @Post()
-    async create(@Body() createExpenseDto: CreateExpenseDto, @Request() request): Promise<Expense> {
+    async create(@Body() createExpenseDto: Omit<ExpenseDTO, 'id_expense' | 'id_user'>, @Request() request): Promise<Expense> {
         return this.expenseService.create(createExpenseDto, request.userId);
     }
 
     @Put(':id')
     async update(
         @Param('id') id: string,
-        @Body() updateExpenseDto: UpdateExpenseDto,
+        @Body() updateExpenseDto: Partial<ExpenseDTO>,
     ): Promise<Expense> {
         return this.expenseService.update(id, updateExpenseDto);
     }

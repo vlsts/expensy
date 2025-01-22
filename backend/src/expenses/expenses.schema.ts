@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { HydratedDocument } from 'mongoose';
 
 export type ExpenseDocument = HydratedDocument<Expense>;
@@ -28,6 +29,12 @@ export class Expense {
 
     @Prop({required: true})
     date: Date;
+}
+
+export class ExpenseDTO extends Expense {
+    @IsNotEmpty()
+    @IsString()
+    id_expense: string;
 }
 
 export const ExpenseSchema = SchemaFactory.createForClass(Expense);
