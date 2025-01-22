@@ -91,8 +91,8 @@
 
 <!-- Loading State -->
 {#if $expenses.loading || $categories.loading}
-    <div class="flex justify-center items-center h-64">
-        <Spinner size="xl" />
+    <div class="flex justify-center items-center h-16">
+        <Spinner size="sm" />
     </div>
 {:else if $expenses.error}
     <div class="text-center text-red-500">

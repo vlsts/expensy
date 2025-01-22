@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Modal, Button, Label, Spinner, Dropzone } from 'flowbite-svelte';
 	import { files } from '$lib/stores/files';
+	import { expenses } from '$lib/stores/expenses';
 
 	let { open = $bindable() } = $props();
 	let selectedFile: FileList | undefined = $state(undefined);
@@ -34,6 +35,7 @@
 			error = err instanceof Error ? err.message : 'Upload failed';
 		} finally {
 			uploading = false;
+			await expenses.fetchExpenses();
 		}
 	}
 </script>
