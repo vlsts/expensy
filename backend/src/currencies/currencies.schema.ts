@@ -10,7 +10,7 @@ export class Currency {
     shortname: string;
 }
 
-export class GetCurrencyDTO extends Currency {
+export class CurrencyDTO extends Currency {
     @IsNotEmpty()
     @IsString()
     id_currency: string;
