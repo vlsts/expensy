@@ -6,9 +6,8 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category, CategoryDocument } from './categories.schema';
-import { CreateCategoryDto } from './dto/create-category.dto';
 import { readFile } from 'fs/promises';
-import { GetCategoryDto } from './dto/get-category.dto';
+import { CategoryDTO } from './categories.schema';
 
 @Injectable()
 export class CategoriesService {
@@ -20,7 +19,7 @@ export class CategoriesService {
     }
 
     async create(
-        createCategoryDto: CreateCategoryDto,
+        createCategoryDto: Omit<CategoryDTO, 'id_user' | 'id_category'>,
         userId: string,
     ): Promise<Category> {
         const category: Category = {
@@ -28,11 +27,19 @@ export class CategoriesService {
             id_user: userId,
         };
         const newCategory = new this.categoryModel(category);
-        return newCategory.save();
+
+        const variable = await newCategory.save();
+
+        return {
+            color: variable.color,
+            id_icon: variable.id_icon,
+            id_user: variable.id_user,
+            name: variable.name
+        };
     }
 
-    async getAll(userId: string): Promise<GetCategoryDto[]> {
-        let categories: GetCategoryDto[] = [];
+    async getAll(userId: string): Promise<Omit<CategoryDTO, 'id_user'>[]> {
+        let categories: Omit<CategoryDTO, 'id_user'>[] = [];
 
         const defaultCategories = await this.categoryModel.find({
             id_user: '00000000-0000-0000-0000-000000000000',
