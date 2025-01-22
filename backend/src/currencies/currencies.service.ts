@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Currency, CurrencyDocument } from './currencies.schema';
+import { Currency, CurrencyDocument, GetCurrencyDTO } from './currencies.schema';
 import { readFile } from 'fs/promises';
-import { GetCurrencyDto } from './dto/get-currency.dto';
 
 @Injectable()
 export class CurrenciesService {
@@ -14,8 +13,8 @@ export class CurrenciesService {
         this.initializeIfEmpty();
     }
 
-    async getAll(): Promise<GetCurrencyDto[]> {
-        let currencies: GetCurrencyDto[] = await this.currencyModel.find();
+    async getAll(): Promise<Omit<GetCurrencyDTO, 'id_currency'>[]> {
+        let currencies: Omit<GetCurrencyDTO, 'id_currency'>[] = await this.currencyModel.find();
 
         currencies = currencies.map((currency) => {
             return {
