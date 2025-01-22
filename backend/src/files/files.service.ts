@@ -261,14 +261,17 @@ export class FilesService {
 
             let expenseToAdd: Omit<ExpenseDTO, 'id_expense' | 'id_user'>;
             let amounts = await this.extractNumbers(resultedTextParts[index]);
-            expenseToAdd.name = expenseObject + expenseNumber;
-            expenseToAdd.amount = amounts[amounts.length - 1];
-            expenseToAdd.description = '';
-            expenseToAdd.id_category = await this.categoryService.getCategoryID(expenseCategory);
-            expenseToAdd.id_files = [await this.getFileID(filename)];
-            expenseToAdd.id_currency =
-                await this.currencyService.getCurrencyID(currencyName);
-            expenseToAdd.date = new Date();
+            expenseToAdd = {
+                name: expenseObject + expenseNumber,
+                amount: amounts[amounts.length - 1],
+                description: '',
+                id_category:
+                    await this.categoryService.getCategoryID(expenseCategory),
+                id_files: [await this.getFileID(filename)],
+                id_currency:
+                    await this.currencyService.getCurrencyID(currencyName),
+                date: new Date(),
+            };
 
             this.expenseService.create(expenseToAdd, uploadedFile.id_user);
 
