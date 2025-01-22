@@ -9,10 +9,8 @@ import {
     Request,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { Category } from './categories.schema';
+import { Category, CategoryDTO } from './categories.schema';
 import { AuthGuard } from '../guards/auth.guard';
-import { GetCategoryDto } from './dto/get-category.dto';
 
 @UseGuards(AuthGuard)
 @Controller('categories')
@@ -20,7 +18,7 @@ export class CategoriesController {
     constructor(private readonly categoryService: CategoriesService) {}
 
     @Get()
-    async findAll(@Request() request): Promise<GetCategoryDto[]> {
+    async findAll(@Request() request): Promise<Omit<CategoryDTO, 'id_user'>[]> {
         const categories = await this.categoryService.getAll(request.userId);
 
         return categories;
@@ -28,7 +26,7 @@ export class CategoriesController {
 
     @Post()
     async create(
-        @Body() createCatDto: CreateCategoryDto,
+        @Body() createCatDto: Omit<CategoryDTO, 'id_user' | 'id_category'>,
         @Request() request,
     ): Promise<Category> {
         return this.categoryService.create(createCatDto, request.userId);
