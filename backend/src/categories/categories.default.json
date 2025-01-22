@@ -3,120 +3,120 @@
         "name": "Groceries",
         "id_icon": "humbleicons:basket",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "FF5733"
     },
     {
         "name": "Shopping",
         "id_icon": "icon-park-outline:shopping",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "33C1FF"
     },
     {
         "name": "Restaurants",
         "id_icon": "material-symbols:restaurant-rounded",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "FFC300"
     },
     {
         "name": "Transport",
         "id_icon": "mingcute:bus-fill",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "DAF7A6"
     },
     {
         "name": "Travel",
         "id_icon": "tabler:plane",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "900C3F"
     },
     {
         "name": "Entertainment",
         "id_icon": "ri:dice-fill",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "581845"
     },
     {
         "name": "Health",
         "id_icon": "solar:health-bold",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "C70039"
     },
     {
         "name": "Services",
         "id_icon": "streamline:subscription-cashflow-solid",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "FFC300"
     },
     {
         "name": "General",
         "id_icon": "carbon:purchase",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "FF5733"
     },
     {
         "name": "Utilities",
         "id_icon": "mdi:gas",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "33FF57"
     },
     {
         "name": "Cash",
         "id_icon": "tabler:cash",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "FF33A1"
     },
     {
         "name": "Transfers",
         "id_icon": "mdi:bank",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "3385FF"
     },
     {
         "name": "Insurance",
         "id_icon": "healthicons:insurance-card",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "FFB533"
     },
     {
         "name": "Wealth",
         "id_icon": "fa6-solid:sack-dollar",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "FF3333"
     },
     {
         "name": "Refund",
         "id_icon": "gridicons:refund",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "33B5FF"
     },
     {
         "name": "Cashback",
         "id_icon": "majesticons:money-plus-line",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "FF33B5"
     },
     {
         "name": "Child Allowance",
         "id_icon": "cil:child",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "B533FF"
     },
     {
         "name": "Investment",
         "id_icon": "streamline:investment-selection-solid",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "FFD700"
     },
     {
         "name": "Loan",
         "id_icon": "mingcute:pig-money-fill",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "8A2BE2"
     },
     {
         "name": "Credit",
         "id_icon": "fluent:wallet-credit-card-16-filled",
         "id_user": "00000000-0000-0000-0000-000000000000",
-        "color": "ffffff"
+        "color": "DAF7A6"
     }
 ]

@@ -28,13 +28,13 @@ export class CategoriesService {
         };
         const newCategory = new this.categoryModel(category);
 
-        const variable = await newCategory.save();
+        const intermediateCategory = await newCategory.save();
 
         return {
-            color: variable.color,
-            id_icon: variable.id_icon,
-            id_user: variable.id_user,
-            name: variable.name
+            color: intermediateCategory.color,
+            id_icon: intermediateCategory.id_icon,
+            id_user: intermediateCategory.id_user,
+            name: intermediateCategory.name
         };
     }
 
