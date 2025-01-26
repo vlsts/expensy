@@ -94,6 +94,6 @@
 {#if showDefaultCategoryToast}
 	<Toast class="fixed bottom-4 right-4" color="red">
 		<span class="font-medium">Error!</span>
-		Cannot delete default category.
+		Cannot delete the category. (If the category is default, you cannot delete it)
 	</Toast>
 {/if}
