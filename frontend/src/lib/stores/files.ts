@@ -1,13 +1,5 @@
-import { writable, type Writable } from 'svelte/store';
-import { PUBLIC_BACKEND_URL } from '$env/static/public';
 import type { File as FileAPI } from '$lib/types/api.types';
-import Corbado from '@corbado/web-js';
-
-interface FilesState {
-    items: FileAPI[];
-    loading: boolean;
-    error: string | null;
-}
+import { Store } from './store';
 
 interface FileMetadata {
     filename: string;
@@ -15,49 +7,16 @@ interface FileMetadata {
     doOCR: boolean;
 }
 
-class FilesStore implements Writable<FilesState> {
-    private readonly store = writable<FilesState>({
-        items: [],
-        loading: false,
-        error: null
-    });
-
-    readonly subscribe = this.store.subscribe;
-    readonly set = this.store.set;
-    readonly update = this.store.update;
-
-    private async apiCall<T>(
-        url: string, 
-        options: RequestInit = {}
-    ): Promise<T> {
-        const response = await fetch(`${PUBLIC_BACKEND_URL}${url}`, {
-            headers: {
-                'Authorization': `Bearer ${Corbado.sessionToken}`
-            },
-            ...options,
-            credentials: 'include'
-        });
-
-        if (!response.ok) {
-            throw new Error(`API call failed: ${response.statusText}`);
-        }
-
-        return response.json();
-    }
-
-    private updateState(partial: Partial<FilesState>) {
-        this.update(state => ({ ...state, ...partial }));
-    }
-
+class FilesStore extends Store<FileAPI> {
     async fetchFiles() {
         this.updateState({ loading: true, error: null });
         try {
             const files = await this.apiCall<FileAPI[]>('/files');
             this.updateState({ items: files, loading: false });
         } catch (error) {
-            this.updateState({ 
+            this.updateState({
                 error: error instanceof Error ? error.message : 'Unknown error',
-                loading: false 
+                loading: false
             });
         }
     }
@@ -82,9 +41,9 @@ class FilesStore implements Writable<FilesState> {
 
             return uploadedFile;
         } catch (error) {
-            this.updateState({ 
+            this.updateState({
                 error: error instanceof Error ? error.message : 'Unknown error',
-                loading: false 
+                loading: false
             });
             throw error;
         }
@@ -94,16 +53,16 @@ class FilesStore implements Writable<FilesState> {
         this.updateState({ loading: true, error: null });
         try {
             await this.apiCall(`/files/${id}`, { method: 'DELETE' });
-            
+
             this.update(state => ({
                 ...state,
                 items: state.items.filter(item => item.id !== id),
                 loading: false
             }));
         } catch (error) {
-            this.updateState({ 
+            this.updateState({
                 error: error instanceof Error ? error.message : 'Unknown error',
-                loading: false 
+                loading: false
             });
             throw error;
         }

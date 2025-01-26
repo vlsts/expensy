@@ -1,57 +1,16 @@
-import { writable, type Writable } from 'svelte/store';
-import { PUBLIC_BACKEND_URL } from '$env/static/public';
 import type { Currency } from '$lib/types/api.types';
-import Corbado from '@corbado/web-js';
+import { Store } from './store';
 
-interface CurrenciesState {
-    items: Currency[];
-    loading: boolean;
-    error: string | null;
-}
-
-class CurrenciesStore implements Writable<CurrenciesState> {
-    private readonly store = writable<CurrenciesState>({
-        items: [],
-        loading: false,
-        error: null
-    });
-
-    readonly subscribe = this.store.subscribe;
-    readonly set = this.store.set;
-    readonly update = this.store.update;
-
-    private async apiCall<T>(
-        url: string, 
-        options: RequestInit = {}
-    ): Promise<T> {
-        const response = await fetch(`${PUBLIC_BACKEND_URL}${url}`, {
-            headers: {
-                'Authorization': `Bearer ${Corbado.sessionToken}`
-            },
-            ...options,
-            credentials: 'include'
-        });
-
-        if (!response.ok) {
-            throw new Error(`API call failed: ${response.statusText}`);
-        }
-
-        return response.json();
-    }
-
-    private updateState(partial: Partial<CurrenciesState>) {
-        this.update(state => ({ ...state, ...partial }));
-    }
-
+class CurrenciesStore extends Store<Currency> {
     async fetchCurrencies() {
         this.updateState({ loading: true, error: null });
         try {
             const data = await this.apiCall<Currency[]>('/currencies');
             this.updateState({ items: data, loading: false });
         } catch (error) {
-            this.updateState({ 
+            this.updateState({
                 error: error instanceof Error ? error.message : 'Unknown error',
-                loading: false 
+                loading: false
             });
         }
     }

@@ -1,57 +1,16 @@
-import { writable, type Writable } from 'svelte/store';
-import { PUBLIC_BACKEND_URL } from '$env/static/public';
 import type { Expense } from '$lib/types/api.types';
-import Corbado from '@corbado/web-js';
+import { Store } from './store';
 
-interface ExpensesState {
-    items: Expense[];
-    loading: boolean;
-    error: string | null;
-}
-
-class ExpensesStore implements Writable<ExpensesState> {
-    private readonly store = writable<ExpensesState>({
-        items: [],
-        loading: false,
-        error: null
-    });
-
-    readonly subscribe = this.store.subscribe;
-    readonly set = this.store.set;
-    readonly update = this.store.update;
-
-    private async apiCall<T>(
-        url: string, 
-        options: RequestInit = {}
-    ): Promise<T> {
-        const response = await fetch(`${PUBLIC_BACKEND_URL}${url}`, {
-            headers: {
-                'Authorization': `Bearer ${Corbado.sessionToken}`
-            },
-            ...options,
-            credentials: 'include'
-        });
-
-        if (!response.ok) {
-            throw new Error(`API call failed: ${response.statusText}`);
-        }
-
-        return response.json();
-    }
-
-    private updateState(partial: Partial<ExpensesState>) {
-        this.update(state => ({ ...state, ...partial }));
-    }
-
+class ExpensesStore extends Store<Expense> {
     async fetchExpenses() {
         this.updateState({ loading: true, error: null });
         try {
             const data = await this.apiCall<Expense[]>('/expenses');
             this.updateState({ items: data, loading: false });
         } catch (error) {
-            this.updateState({ 
+            this.updateState({
                 error: error instanceof Error ? error.message : 'Unknown error',
-                loading: false 
+                loading: false
             });
         }
     }
@@ -64,16 +23,16 @@ class ExpensesStore implements Writable<ExpensesState> {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(expense)
             });
-            
+
             this.store.update(state => ({
                 ...state,
                 items: [...state.items, created],
                 loading: false
             }));
         } catch (error) {
-            this.updateState({ 
+            this.updateState({
                 error: error instanceof Error ? error.message : 'Unknown error',
-                loading: false 
+                loading: false
             });
         }
     }
@@ -82,16 +41,16 @@ class ExpensesStore implements Writable<ExpensesState> {
         this.updateState({ loading: true, error: null });
         try {
             await this.apiCall(`/expenses/${id}`, { method: 'DELETE' });
-            
+
             this.store.update(state => ({
                 ...state,
                 items: state.items.filter(item => item.id_expense !== id),
                 loading: false
             }));
         } catch (error) {
-            this.updateState({ 
+            this.updateState({
                 error: error instanceof Error ? error.message : 'Unknown error',
-                loading: false 
+                loading: false
             });
         }
     }
