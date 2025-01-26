@@ -20,30 +20,6 @@
 
 		return file?.filename || null;
 	}
-
-	let filesLoading = $state(new Set<string>());
-
-	// async function downloadFile(fileId: string) {
-	//     filesLoading.add(fileId);
-	//     try {
-	//         const file = await getFile(fileId);
-	//         if (!file) throw new Error('File not found');
-
-	//         const blob = new Blob([file.data], { type: file.mime_type });
-	//         const url = window.URL.createObjectURL(blob);
-	//         const a = document.createElement('a');
-	//         a.href = url;
-	//         a.download = `${expense?.name}_${fileId}`;
-	//         document.body.appendChild(a);
-	//         a.click();
-	//         window.URL.revokeObjectURL(url);
-	//         document.body.removeChild(a);
-	//     } catch (error) {
-	//         console.error('Failed to download file:', error);
-	//     } finally {
-	//         filesLoading.delete(fileId);
-	//     }
-	// }
 </script>
 
 <Modal title="Viewing expense" bind:open autoclose outsideclose>

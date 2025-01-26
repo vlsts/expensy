@@ -59,7 +59,7 @@
 						class="text-blue-600 hover:underline">
 						Iconify
 					</a>
-					 to choose an icon
+					to choose an icon
 				</p>
 			</div>
 

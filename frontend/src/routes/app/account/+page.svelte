@@ -82,7 +82,8 @@
 		{/if}
 
 		<!-- Interactive Panel Column -->
-		<Card class="p-6 w-full mb-6 {$isLoggedIn ? 'md:row-span-2 md:col-start-2 md:row-start-2' : ''}">
+		<Card
+			class="p-6 w-full mb-6 {$isLoggedIn ? 'md:row-span-2 md:col-start-2 md:row-start-2' : ''}">
 			<div bind:this={authElement} class="w-full {$isLoggedIn ? 'hidden' : ''}"></div>
 			<div bind:this={passkeyManagementElement} class="w-full {!$isLoggedIn ? 'hidden' : ''}"></div>
 		</Card>

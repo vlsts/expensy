@@ -44,11 +44,13 @@
 			<div class="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
 				<Heading tag="h2" class="text-xl">Categories</Heading>
 			</div>
-			<div class="grid grid-cols-2 sm:grid-cols-3 gap-6 max-h-[500px] overflow-y-auto pr-2 
+			<div
+				class="grid grid-cols-2 sm:grid-cols-3 gap-6 max-h-[500px] overflow-y-auto pr-2
 						scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
 				{#each $categories.items as category}
-					<div class="flex flex-col items-center p-4 rounded-lg border hover:shadow-md transition-shadow">
-						<div 
+					<div
+						class="flex flex-col items-center p-4 rounded-lg border hover:shadow-md transition-shadow">
+						<div
 							class="w-12 h-12 rounded-full flex items-center justify-center mb-2"
 							style:background-color={'#' + category.color + '33'}>
 							<Icon icon={category.id_icon} class="w-6 h-6" />
@@ -60,31 +62,26 @@
 							size="xs"
 							color="red"
 							class="!p-1 mt-2"
-							on:click={() => handleCategoryDelete(category.id_category)}
-						>
+							on:click={() => handleCategoryDelete(category.id_category)}>
 							<Icon icon="bi:trash" class="w-3 h-3" />
 						</Button>
 					</div>
 				{/each}
 			</div>
 		</Card>
-	
+
 		<!-- Files Card -->
 		<Card>
 			<div class="flex justify-between items-center mb-4 sticky top-0 bg-white z-10">
 				<Heading tag="h2" class="text-xl">Files</Heading>
 			</div>
-			<div class="divide-y max-h-[500px] overflow-y-auto pr-2
+			<div
+				class="divide-y max-h-[500px] overflow-y-auto pr-2
 						scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
 				{#each $files.items as file}
 					<div class="flex items-center justify-between py-4 px-2">
 						<span class="truncate flex-1 mr-4">{file.filename}</span>
-						<Button
-							size="xs"
-							color="red"
-							class="!p-1"
-							on:click={() => handleFileDelete(file.id!)}
-						>
+						<Button size="xs" color="red" class="!p-1" on:click={() => handleFileDelete(file.id!)}>
 							<Icon icon="bi:trash" class="w-3 h-3" />
 						</Button>
 					</div>
