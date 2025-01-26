@@ -20,9 +20,10 @@ export class Store<T> implements Writable<State<T>> {
     readonly update = this.store.update;
 
     protected async apiCall<T2>(
-        url: string, 
+        url: string,
+        expectReturn: boolean = true,
         options: RequestInit = {}
-    ): Promise<T2> {
+    ): Promise<T2 | void> {
         const response = await fetch(`${PUBLIC_BACKEND_URL}${url}`, {
             headers: {
                 'Authorization': `Bearer ${Corbado.sessionToken}`
@@ -35,7 +36,7 @@ export class Store<T> implements Writable<State<T>> {
             throw new Error(`API call failed: ${response.statusText}`);
         }
 
-        return response.json();
+        if (expectReturn) return response.json();
     }
 
     protected updateState(partial: Partial<State<T>>) {

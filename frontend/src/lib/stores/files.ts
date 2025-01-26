@@ -11,8 +11,8 @@ class FilesStore extends Store<FileAPI> {
     async fetchFiles() {
         this.updateState({ loading: true, error: null });
         try {
-            const files = await this.apiCall<FileAPI[]>('/files');
-            this.updateState({ items: files, loading: false });
+            const files = await this.apiCall<FileAPI[]>('/files', true);
+            this.updateState({ items: files!, loading: false });
         } catch (error) {
             this.updateState({
                 error: error instanceof Error ? error.message : 'Unknown error',
@@ -28,14 +28,14 @@ class FilesStore extends Store<FileAPI> {
             formData.append('file', file);
             formData.append('createFileDto', JSON.stringify(metadata));
 
-            const uploadedFile = await this.apiCall<FileAPI>('/files/upload', {
+            const uploadedFile = await this.apiCall<FileAPI>('/files/upload', true, {
                 method: 'POST',
                 body: formData
             });
 
             this.update(state => ({
                 ...state,
-                items: [...state.items, uploadedFile],
+                items: [...state.items, uploadedFile!],
                 loading: false
             }));
 
@@ -52,7 +52,7 @@ class FilesStore extends Store<FileAPI> {
     async deleteFile(id: string) {
         this.updateState({ loading: true, error: null });
         try {
-            await this.apiCall(`/files/${id}`, { method: 'DELETE' });
+            await this.apiCall(`/files/${id}`, false, { method: 'DELETE' });
 
             this.update(state => ({
                 ...state,

@@ -6,7 +6,7 @@ class ExpensesStore extends Store<Expense> {
         this.updateState({ loading: true, error: null });
         try {
             const data = await this.apiCall<Expense[]>('/expenses');
-            this.updateState({ items: data, loading: false });
+            this.updateState({ items: data!, loading: false });
         } catch (error) {
             this.updateState({
                 error: error instanceof Error ? error.message : 'Unknown error',
@@ -18,7 +18,7 @@ class ExpensesStore extends Store<Expense> {
     async createExpense(expense: Omit<Expense, 'id_expense'>) {
         this.updateState({ loading: true, error: null });
         try {
-            const created = await this.apiCall<Expense>('/expenses', {
+            const created = await this.apiCall<Expense>('/expenses', true, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(expense)
@@ -26,7 +26,7 @@ class ExpensesStore extends Store<Expense> {
 
             this.store.update(state => ({
                 ...state,
-                items: [...state.items, created],
+                items: [...state.items, created!],
                 loading: false
             }));
         } catch (error) {
@@ -40,7 +40,7 @@ class ExpensesStore extends Store<Expense> {
     async deleteExpense(id: string) {
         this.updateState({ loading: true, error: null });
         try {
-            await this.apiCall(`/expenses/${id}`, { method: 'DELETE' });
+            await this.apiCall(`/expenses/${id}`, false, { method: 'DELETE' });
 
             this.store.update(state => ({
                 ...state,

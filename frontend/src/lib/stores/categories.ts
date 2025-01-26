@@ -6,7 +6,7 @@ class CategoriesStore extends Store<Category> {
         this.updateState({ loading: true, error: null });
         try {
             const categories = await this.apiCall<Category[]>('/categories');
-            this.updateState({ items: categories, loading: false });
+            this.updateState({ items: categories!, loading: false });
         } catch (error) {
             this.updateState({
                 error: error instanceof Error ? error.message : 'Unknown error',
@@ -18,7 +18,7 @@ class CategoriesStore extends Store<Category> {
     async createCategory(category: Omit<Category, 'id_category'>) {
         this.updateState({ loading: true, error: null });
         try {
-            const created = await this.apiCall<Category>('/categories', {
+            const created = await this.apiCall<Category>('/categories', true, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(category)
@@ -26,7 +26,7 @@ class CategoriesStore extends Store<Category> {
 
             this.update(state => ({
                 ...state,
-                items: [...state.items, created],
+                items: [...state.items, created!],
                 loading: false
             }));
 
@@ -43,7 +43,7 @@ class CategoriesStore extends Store<Category> {
     async deleteCategory(id: string) {
         this.updateState({ loading: true, error: null });
         try {
-            await this.apiCall(`/categories/${id}`, { method: 'DELETE' });
+            await this.apiCall(`/categories/${id}`, false, { method: 'DELETE' });
 
             this.update(state => ({
                 ...state,

@@ -6,7 +6,7 @@ class CurrenciesStore extends Store<Currency> {
         this.updateState({ loading: true, error: null });
         try {
             const data = await this.apiCall<Currency[]>('/currencies');
-            this.updateState({ items: data, loading: false });
+            this.updateState({ items: data!, loading: false });
         } catch (error) {
             this.updateState({
                 error: error instanceof Error ? error.message : 'Unknown error',
