@@ -25,10 +25,12 @@ export class File {
 export class FilesDTO extends File {
     @IsNotEmpty()
     @IsString()
-    id_file: string;
+    _id: string;
 }
 
-export type CreateFileDTO = Omit<File, 'id_user' | 'size' | 'data'> & { doOCR: boolean };
+export type CreateFileDTO = Omit<File, 'id_user' | 'size' | 'data'> & {
+    doOCR: boolean;
+};
 
 export type GetFileDTO = Omit<FilesDTO, 'id_user' | 'data'>;
 

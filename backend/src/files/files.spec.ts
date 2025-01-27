@@ -103,12 +103,12 @@ describe('Files Module', () => {
 
         it('should return all files for user', async () => {
             const mockFiles = [{ id: 'file1', filename: 'test1.pdf' }];
-            jest.spyOn(service, 'findAll').mockResolvedValue(mockFiles as any);
+            jest.spyOn(service, 'getAll').mockResolvedValue(mockFiles as any);
 
-            const result = await controller.findAll({ userId: 'user123' });
+            const result = await controller.getAll({ userId: 'user123' });
 
             expect(result).toEqual(mockFiles);
-            expect(service.findAll).toHaveBeenCalledWith('user123');
+            expect(service.getAll).toHaveBeenCalledWith('user123');
         });
 
         it('should return file by id', async () => {
@@ -158,10 +158,16 @@ describe('Files Module', () => {
                 ['£10.99', '£'], // British Pound
                 ['€10.99', '€'], // Euro
                 ['$10.99', '$'], // US Dollar
-            ])('should detect %s currency symbol best case', async (input, expected) => {
-                const result = await service.detectCurrency([input, 'item']);
-                expect(result).toBe(expected);
-            });
+            ])(
+                'should detect %s currency symbol best case',
+                async (input, expected) => {
+                    const result = await service.detectCurrency([
+                        input,
+                        'item',
+                    ]);
+                    expect(result).toBe(expected);
+                },
+            );
 
             test.each([
                 ['AED 10.99', 'AED'],
@@ -187,10 +193,16 @@ describe('Files Module', () => {
                 ['RON 10.99', 'RON'],
                 ['RSD 10.99', 'RSD'],
                 ['USD 10.99', 'USD'],
-            ])('should detect %s 3 letter acronym best case', async (input, expected) => {
-                const result = await service.detectCurrency([input, 'item']);
-                expect(result).toBe(expected);
-            });
+            ])(
+                'should detect %s 3 letter acronym best case',
+                async (input, expected) => {
+                    const result = await service.detectCurrency([
+                        input,
+                        'item',
+                    ]);
+                    expect(result).toBe(expected);
+                },
+            );
 
             test.each([
                 ['10.99₹', '₹'], // Indian Rupee
@@ -198,10 +210,16 @@ describe('Files Module', () => {
                 ['10.99£', '£'], // British Pound
                 ['10.99€', '€'], // Euro
                 ['10.99$', '$'], // US Dollar
-            ])('should detect %s currency symbol reverse case', async (input, expected) => {
-                const result = await service.detectCurrency([input, 'item']);
-                expect(result).toBe(expected);
-            });
+            ])(
+                'should detect %s currency symbol reverse case',
+                async (input, expected) => {
+                    const result = await service.detectCurrency([
+                        input,
+                        'item',
+                    ]);
+                    expect(result).toBe(expected);
+                },
+            );
 
             test.each([
                 ['10.99 AED', 'AED'],
@@ -227,10 +245,16 @@ describe('Files Module', () => {
                 ['10.99 RON', 'RON'],
                 ['10.99 RSD', 'RSD'],
                 ['10.99 USD', 'USD'],
-            ])('should detect %s 3 letter acronym reverse case', async (input, expected) => {
-                const result = await service.detectCurrency([input, 'item']);
-                expect(result).toBe(expected);
-            });
+            ])(
+                'should detect %s 3 letter acronym reverse case',
+                async (input, expected) => {
+                    const result = await service.detectCurrency([
+                        input,
+                        'item',
+                    ]);
+                    expect(result).toBe(expected);
+                },
+            );
 
             test.each([
                 ['asdnlas dasnkldlkasn d 10.99₹sasd', '₹'], // Indian Rupee
@@ -238,43 +262,126 @@ describe('Files Module', () => {
                 ['asdnlas dasnkldlkasn d 10.99£sasd', '£'], // British Pound
                 ['asdnlas dasnkldlkasn d 10.99€sdas', '€'], // Euro
                 ['asdnlas dasnkldlkasn d 10.99$dasd', '$'], // US Dollar
-            ])('should detect %s currency symbol full case', async (input, expected) => {
-                const result = await service.detectCurrency([input, 'item']);
-                expect(result).toBe(expected);
-            });
+            ])(
+                'should detect %s currency symbol full case',
+                async (input, expected) => {
+                    const result = await service.detectCurrency([
+                        input,
+                        'item',
+                    ]);
+                    expect(result).toBe(expected);
+                },
+            );
 
             test.each([
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 AED sdfsdfsdf fsd sd', 'AED'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 AUD asdvcddfg asadff', 'AUD'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 BGN asdvcddfg asadff', 'BGN'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 BRL asdvcddfg asadff', 'BRL'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 CAD asdvcddfg asadff', 'CAD'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 CHF asdvcddfg asadff', 'CHF'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 CLP asdvcddfg asadff', 'CLP'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 COP asdvcddfg asadff', 'COP'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 CZK asdvcddfg asadff', 'CZK'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 DKK asdvcddfg asadff', 'DKK'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 EUR asdvcddfg asadff', 'EUR'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 GBP asdvcddfg asadff', 'GBP'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 HKD asdvcddfg asadff', 'HKD'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 HUF asdvcddfg asadff', 'HUF'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 ILS asdvcddfg asadff', 'ILS'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 JPY asdvcddfg asadff', 'JPY'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 MXN asdvcddfg asadff', 'MXN'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 NOK asdvcddfg asadff', 'NOK'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 NZD asdvcddfg asadff', 'NZD'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 PLN asdvcddfg asadff', 'PLN'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 RON asdvcddfg asadff', 'RON'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 RSD asdvcddfg asadff', 'RSD'],
-                ['asdvcddfgfd dfg dfg fasdasd 10.99 USD asdvcddfg asadff', 'USD'],
-            ])('should detect %s 3 letter acronym full case', async (input, expected) => {
-                const result = await service.detectCurrency([input, 'item']);
-                expect(result).toBe(expected);
-            });
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 AED sdfsdfsdf fsd sd',
+                    'AED',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 AUD asdvcddfg asadff',
+                    'AUD',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 BGN asdvcddfg asadff',
+                    'BGN',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 BRL asdvcddfg asadff',
+                    'BRL',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 CAD asdvcddfg asadff',
+                    'CAD',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 CHF asdvcddfg asadff',
+                    'CHF',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 CLP asdvcddfg asadff',
+                    'CLP',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 COP asdvcddfg asadff',
+                    'COP',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 CZK asdvcddfg asadff',
+                    'CZK',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 DKK asdvcddfg asadff',
+                    'DKK',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 EUR asdvcddfg asadff',
+                    'EUR',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 GBP asdvcddfg asadff',
+                    'GBP',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 HKD asdvcddfg asadff',
+                    'HKD',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 HUF asdvcddfg asadff',
+                    'HUF',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 ILS asdvcddfg asadff',
+                    'ILS',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 JPY asdvcddfg asadff',
+                    'JPY',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 MXN asdvcddfg asadff',
+                    'MXN',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 NOK asdvcddfg asadff',
+                    'NOK',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 NZD asdvcddfg asadff',
+                    'NZD',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 PLN asdvcddfg asadff',
+                    'PLN',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 RON asdvcddfg asadff',
+                    'RON',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 RSD asdvcddfg asadff',
+                    'RSD',
+                ],
+                [
+                    'asdvcddfgfd dfg dfg fasdasd 10.99 USD asdvcddfg asadff',
+                    'USD',
+                ],
+            ])(
+                'should detect %s 3 letter acronym full case',
+                async (input, expected) => {
+                    const result = await service.detectCurrency([
+                        input,
+                        'item',
+                    ]);
+                    expect(result).toBe(expected);
+                },
+            );
 
             it('should not retrieve any currency', async () => {
-                const result = await service.detectCurrency(["Some random text no currency in it USDtho -__-"]);
-                expect(result).toEqual("No currency found");
+                const result = await service.detectCurrency([
+                    'Some random text no currency in it USDtho -__-',
+                ]);
+                expect(result).toEqual('No currency found');
             });
         });
 
@@ -285,7 +392,9 @@ describe('Files Module', () => {
             });
 
             it('should not extract any numbers from string', async () => {
-                const result = await service.extractNumbers('This string contains no numbers, maybe.. three?');
+                const result = await service.extractNumbers(
+                    'This string contains no numbers, maybe.. three?',
+                );
                 expect(result).toEqual([]);
             });
 
@@ -311,21 +420,21 @@ describe('Files Module', () => {
                 const result = await service.escapeRegExp(input);
                 expect(result).toBe(expected);
             });
-    
+
             it('should return the same string if no special characters', async () => {
                 const input = 'hello';
                 const expected = 'hello';
                 const result = await service.escapeRegExp(input);
                 expect(result).toBe(expected);
             });
-    
+
             it('should escape a dollar sign', async () => {
                 const input = '$';
                 const expected = '\\$';
                 const result = await service.escapeRegExp(input);
                 expect(result).toBe(expected);
             });
-    
+
             it('should escape multiple special characters', async () => {
                 const input = 'abc$def*ghi?jkl';
                 const expected = 'abc\\$def\\*ghi\\?jkl';
@@ -336,42 +445,57 @@ describe('Files Module', () => {
 
         describe('extractWordsUntilSymbol', () => {
             it('should extract words until the dollar sign', async () => {
-                const input = "I have $100 in my account.";
-                const symbol = "$";
-                const expected = "I have";
-                const result = await service.extractWordsUntilSymbol(input, symbol);
+                const input = 'I have $100 in my account.';
+                const symbol = '$';
+                const expected = 'I have';
+                const result = await service.extractWordsUntilSymbol(
+                    input,
+                    symbol,
+                );
                 expect(result).toBe(expected);
             });
-    
+
             it('should extract words until the euro sign', async () => {
-                const input = "The price is €50.";
-                const symbol = "€";
-                const expected = "The price is";
-                const result = await service.extractWordsUntilSymbol(input, symbol);
+                const input = 'The price is €50.';
+                const symbol = '€';
+                const expected = 'The price is';
+                const result = await service.extractWordsUntilSymbol(
+                    input,
+                    symbol,
+                );
                 expect(result).toBe(expected);
             });
-    
+
             it('should return empty string if symbol is not found', async () => {
-                const input = "No special characters here.";
-                const symbol = "$";
-                const expected = "";
-                const result = await service.extractWordsUntilSymbol(input, symbol);
+                const input = 'No special characters here.';
+                const symbol = '$';
+                const expected = '';
+                const result = await service.extractWordsUntilSymbol(
+                    input,
+                    symbol,
+                );
                 expect(result).toBe(expected);
             });
-    
+
             it('should handle multiple spaces correctly', async () => {
-                const input = "This   is a test   string   with  $ symbols.";
-                const symbol = "$";
-                const expected = "This is a test string with";
-                const result = await service.extractWordsUntilSymbol(input, symbol);
+                const input = 'This   is a test   string   with  $ symbols.';
+                const symbol = '$';
+                const expected = 'This is a test string with';
+                const result = await service.extractWordsUntilSymbol(
+                    input,
+                    symbol,
+                );
                 expect(result).toBe(expected);
             });
-    
+
             it('should escape special characters in the symbol', async () => {
-                const input = "This is a test string with . and * symbols.";
-                const symbol = ".";
-                const expected = "This is a test string with";
-                const result = await service.extractWordsUntilSymbol(input, symbol);
+                const input = 'This is a test string with . and * symbols.';
+                const symbol = '.';
+                const expected = 'This is a test string with';
+                const result = await service.extractWordsUntilSymbol(
+                    input,
+                    symbol,
+                );
                 expect(result).toBe(expected);
             });
         });

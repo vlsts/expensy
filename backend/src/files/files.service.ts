@@ -1,7 +1,13 @@
-import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    forwardRef,
+    Inject,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateFileDTO, File, FileDocument, GetFileDTO } from './files.schema';
+import { CreateFileDTO, File, FileDocument } from './files.schema';
 import { ExpensesService } from '../expenses/expenses.service';
 import { CurrenciesService } from '../currencies/currencies.service';
 import { promises as fs } from 'fs';
@@ -9,24 +15,29 @@ import { HfInference } from '@huggingface/inference';
 import { ConfigService } from '@nestjs/config';
 import { CategoriesService } from '../categories/categories.service';
 import { ExpenseDTO } from '../expenses/expenses.schema';
+import { Service } from '../base/service';
 
-let Tesseract = require('tesseract.js');
+const Tesseract = require('tesseract.js');
 
 @Injectable()
-export class FilesService {
+export class FilesService extends Service<File> {
     constructor(
         @InjectModel(File.name) private fileModel: Model<FileDocument>,
-        @Inject(forwardRef(() => CurrenciesService)) private currencyService: CurrenciesService,
-        @Inject(forwardRef(() => ExpensesService)) private expenseService: ExpensesService,
-        @Inject(forwardRef(() => CategoriesService)) private categoryService: CategoriesService,
+        @Inject(forwardRef(() => CurrenciesService))
+        private currencyService: CurrenciesService,
+        @Inject(forwardRef(() => ExpensesService))
+        private expenseService: ExpensesService,
+        @Inject(forwardRef(() => CategoriesService))
+        private categoryService: CategoriesService,
         private configService: ConfigService,
-    ) {}
+    ) {
+        super(fileModel);
+    }
 
-    async create(
+    async create_file_entry(
         createFileDto: CreateFileDTO,
-        fileBuffer: Buffer,
-        size: number,
         userId: string,
+        [fileBuffer, size]: [Buffer, number],
     ) {
         const newFile = new this.fileModel({
             ...createFileDto,
@@ -38,28 +49,11 @@ export class FilesService {
         newFile.save();
 
         if (createFileDto.doOCR) {
-            const addedExpenses: Omit<ExpenseDTO, 'id_expense' | 'id_user'>[] = await this.doOCR(
-                fileBuffer,
-                newFile.filename,
-            );
+            const addedExpenses: Omit<ExpenseDTO, '_id' | 'id_user'>[] =
+                await this.doOCR(fileBuffer, newFile.filename);
 
             return addedExpenses;
         }
-    }
-
-    async findAll(userId: string): Promise<GetFileDTO[]> {
-        let files = await this.fileModel
-            .find({
-                id_user: userId,
-            })
-            .exec();
-
-        return files.map((f) => ({
-            id_file: f._id.toString(),
-            filename: f.filename,
-            size: f.size,
-            mime_type: f.mime_type,
-        }));
     }
 
     async findFileById(id: string): Promise<File | null> {
@@ -138,7 +132,10 @@ export class FilesService {
         return symbol.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    async extractWordsUntilSymbol(input: string, symbol: string): Promise<string> {
+    async extractWordsUntilSymbol(
+        input: string,
+        symbol: string,
+    ): Promise<string> {
         const escapedSymbol = await this.escapeRegExp(symbol);
 
         const regex = new RegExp(`^(.*?)${escapedSymbol}`, 's');
@@ -202,85 +199,97 @@ export class FilesService {
         return recog.data.text;
     }
 
-    private tokenizeText(text: string): string[] {        
-        return text
-            .split(/(\n)/)
-            .filter((line) => line.trim() !== '');
+    private tokenizeText(text: string): string[] {
+        return text.split(/(\n)/).filter((line) => line.trim() !== '');
     }
 
     private async processExpenses(
         textParts: string[],
         currencyName: string,
         uploadedFile: File,
-    ): Promise<Omit<ExpenseDTO, 'id_expense' | 'id_user'>[]> {
-        const addedExpenses: Omit<ExpenseDTO, 'id_expense' | 'id_user'>[] = [];
+    ): Promise<Omit<ExpenseDTO, '_id' | 'id_user'>[]> {
+        const addedExpenses: Omit<ExpenseDTO, '_id' | 'id_user'>[] = [];
         let expenseNumber = 0;
         let index = 0;
-    
+
         while (index < textParts.length) {
             if (!textParts[index].includes(currencyName)) {
                 index++;
                 continue;
             }
-    
+
             const expenseDTO = await this.createExpenseDTO(
                 textParts[index],
                 currencyName,
                 expenseNumber,
                 uploadedFile,
             );
-    
+
             await this.expenseService.create(expenseDTO, uploadedFile.id_user);
             addedExpenses.push(expenseDTO);
             expenseNumber++;
             index++;
         }
-    
+
         return addedExpenses;
     }
-    
+
     private async createExpenseDTO(
         text: string,
         currencyName: string,
         expenseNumber: number,
         uploadedFile: File,
-    ): Promise<Omit<ExpenseDTO, 'id_expense' | 'id_user'>> {
-        const expenseObject = await this.extractWordsUntilSymbol(text, currencyName);
-        const expenseCategory = expenseObject === '' ? 'General' : await this.classifyExpense(expenseObject);
+    ): Promise<Omit<ExpenseDTO, '_id' | 'id_user'>> {
+        const expenseObject = await this.extractWordsUntilSymbol(
+            text,
+            currencyName,
+        );
+        const expenseCategory =
+            expenseObject === ''
+                ? 'General'
+                : await this.classifyExpense(expenseObject);
         const amounts = await this.extractNumbers(text);
-    
+
         return {
             name: expenseObject + expenseNumber,
             amount: amounts[amounts.length - 1],
             description: '',
-            id_category: await this.categoryService.getCategoryID(expenseCategory),
+            id_category:
+                await this.categoryService.getCategoryID(expenseCategory),
             id_files: [await this.getFileID(uploadedFile.filename)],
             id_currency: await this.currencyService.getCurrencyID(currencyName),
             date: new Date(),
         };
     }
 
-    async doOCR(data: Buffer, filename: string): Promise<Omit<ExpenseDTO, 'id_expense' | 'id_user'>[]> {
+    async doOCR(
+        data: Buffer,
+        filename: string,
+    ): Promise<Omit<ExpenseDTO, '_id' | 'id_user'>[]> {
         const resultedText = await this.extractTextFromImage(data);
         if (!resultedText) {
             console.log('No text could be retrieved from the receipt!');
             return [];
         }
-    
+
         const resultedTextParts = this.tokenizeText(resultedText);
         if (resultedTextParts.length === 0) {
             console.log('Text parts could not be retrieved!');
             return [];
         }
-    
+
         const currencyName = await this.detectCurrency(resultedTextParts);
         if (currencyName === 'No currency found') {
             console.log('Currency could not be retrieved!');
             return [];
         }
-    
+
         const uploadedFile = await this.findFileByFilename(filename);
-        return this.processExpenses(resultedTextParts, currencyName, uploadedFile);
+        return this.processExpenses(
+            resultedTextParts,
+            currencyName,
+            uploadedFile,
+        );
     }
 
     async delete(id: string, userId: string): Promise<void> {
@@ -291,21 +300,19 @@ export class FilesService {
         }
 
         if (findResult.id_user !== userId) {
-            throw new BadRequestException(
-                'This file was not uploaded by you!',
-            );
+            throw new BadRequestException('This file was not uploaded by you!');
         }
 
         await this.fileModel.findByIdAndDelete(id);
 
-        const expenses = (await this.expenseService.getAll(userId));
+        const expenses = await this.expenseService.getAll<ExpenseDTO>(userId);
 
-        expenses.forEach(element => {
-            if(element.id_files.includes(id)) {
-                element.id_files.filter(id_file => id_file !== id);
-            };
+        expenses.forEach((element) => {
+            if (element.id_files.includes(id)) {
+                element.id_files.filter((id_file) => id_file !== id);
+            }
 
-            this.fileModel.findByIdAndUpdate(element.id_expense, element);
+            this.fileModel.findByIdAndUpdate(element._id, element);
         });
     }
 }

@@ -12,9 +12,9 @@ import { CategoriesModule } from '../categories/categories.module';
         MongooseModule.forFeature([{ name: File.name, schema: FileSchema }]),
         CurrenciesModule,
         ExpensesModule,
-        CategoriesModule
+        CategoriesModule,
     ],
     controllers: [FilesController],
     providers: [FilesService],
 })
-export class FilesModule {}
+export class FilesModule { }

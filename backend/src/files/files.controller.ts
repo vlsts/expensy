@@ -21,11 +21,11 @@ import { CreateFileDTO, GetFileDTO } from './files.schema';
 @UseGuards(AuthGuard)
 @Controller('files')
 export class FilesController {
-    constructor(private readonly filesService: FilesService) {}
+    constructor(private readonly filesService: FilesService) { }
 
     @Get()
-    async findAll(@Request() request): Promise<GetFileDTO[]> {
-        return await this.filesService.findAll(request.userId);
+    async getAll(@Request() request): Promise<GetFileDTO[]> {
+        return await this.filesService.getAll(request.userId);
     }
 
     @Get(':id')
