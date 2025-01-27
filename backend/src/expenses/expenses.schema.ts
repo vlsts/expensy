@@ -1,40 +1,39 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { HydratedDocument } from 'mongoose';
 
 export type ExpenseDocument = HydratedDocument<Expense>;
 
 @Schema()
 export class Expense {
-    @Prop({required: true})
+    @Prop({ required: true })
     name: string;
 
-    @Prop({required: true})
+    @Prop({ required: true })
     amount: number;
 
-    @Prop({required: true})
+    @Prop({ required: true })
     id_currency: string;
 
     @Prop()
     description: string;
 
-    @Prop({required: true})
+    @Prop({ required: true })
     id_files: string[];
 
-    @Prop({required: true})
+    @Prop({ required: true })
     id_category: string;
 
-    @Prop({required: true})
+    @Prop({ required: true })
     id_user: string;
 
-    @Prop({required: true})
+    @Prop({ required: true })
     date: Date;
 }
 
 export class ExpenseDTO extends Expense {
-    @IsNotEmpty()
     @IsString()
-    id_expense: string;
+    _id?: string;
 }
 
 export const ExpenseSchema = SchemaFactory.createForClass(Expense);
