@@ -21,11 +21,11 @@ async function bootstrap() {
             'Authorization',
         ],
         preflightContinue: false,
-        optionsSuccessStatus: 204
+        optionsSuccessStatus: 204,
     });
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ extended: true, limit: '50mb' }));
-    app.use(cookieParser())
+    app.use(cookieParser());
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
     const config = new DocumentBuilder()

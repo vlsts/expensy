@@ -56,7 +56,7 @@ export class AuthGuard implements CanActivate {
     }
 
     async validateRequest(request): Promise<null | string> {
-        let sessionToken = this.extractToken(request);
+        const sessionToken = this.extractToken(request);
 
         if (!sessionToken) {
             return null;
