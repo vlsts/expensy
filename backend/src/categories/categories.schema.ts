@@ -30,7 +30,7 @@ export class Category {
 export class CategoryDTO extends Category {
     @IsNotEmpty()
     @IsString()
-    id_category: string;
+    _id: string;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);

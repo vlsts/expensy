@@ -15,11 +15,13 @@ import { AuthGuard } from '../guards/auth.guard';
 @UseGuards(AuthGuard)
 @Controller('categories')
 export class CategoriesController {
-    constructor(private readonly categoryService: CategoriesService) {}
+    constructor(private readonly categoryService: CategoriesService) { }
 
     @Get()
-    async findAll(@Request() request): Promise<Omit<CategoryDTO, 'id_user'>[]> {
-        const categories = await this.categoryService.getAll(request.userId);
+    async getAll(@Request() request): Promise<Omit<CategoryDTO, 'id_user'>[]> {
+        const categories = await this.categoryService.getAll<
+            Omit<CategoryDTO, 'id_user'>
+        >(request.userId);
 
         return categories;
     }

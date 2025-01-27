@@ -1,44 +1,24 @@
-import {
-    BadRequestException,
-    Injectable,
-    NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category, CategoryDocument } from './categories.schema';
-import { readFile } from 'fs/promises';
 import { CategoryDTO } from './categories.schema';
+import { Service } from 'src/base/service';
 
 @Injectable()
-export class CategoriesService {
+export class CategoriesService extends Service<Category> {
     constructor(
         @InjectModel(Category.name)
         private categoryModel: Model<CategoryDocument>,
     ) {
-        this.initializeIfEmpty();
+        super(categoryModel);
+        this.initializeIfEmpty(`${__dirname}/categories.default.json`, [
+            'name',
+            'id_user',
+        ]);
     }
 
-    async create(
-        createCategoryDto: Omit<CategoryDTO, 'id_user' | 'id_category'>,
-        userId: string,
-    ): Promise<Category> {
-        const category: Category = {
-            ...createCategoryDto,
-            id_user: userId,
-        };
-        const newCategory = new this.categoryModel(category);
-
-        const intermediateCategory = await newCategory.save();
-
-        return {
-            color: intermediateCategory.color,
-            id_icon: intermediateCategory.id_icon,
-            id_user: intermediateCategory.id_user,
-            name: intermediateCategory.name
-        };
-    }
-
-    async getAll(userId: string): Promise<Omit<CategoryDTO, 'id_user'>[]> {
+    override async getAll<TGetDto>(userId: string): Promise<TGetDto[]> {
         let categories: Omit<CategoryDTO, 'id_user'>[] = [];
 
         const defaultCategories = await this.categoryModel.find({
@@ -55,7 +35,7 @@ export class CategoriesService {
                     id_icon: category.id_icon,
                     color: category.color,
                     name: category.name,
-                    id_category: category._id.toString(),
+                    _id: category._id.toString(),
                 };
             }),
             ...userCategories.map((category) => {
@@ -63,56 +43,17 @@ export class CategoriesService {
                     id_icon: category.id_icon,
                     color: category.color,
                     name: category.name,
-                    id_category: category._id.toString(),
+                    _id: category._id.toString(),
                 };
             }),
         ];
 
-        return categories;
-    }
-
-    async initializeIfEmpty() {
-        try {
-            const data = await readFile(
-                `${__dirname}/categories.default.json`,
-                'utf8',
-            );
-            const jsonData: Category[] = JSON.parse(data);
-            for (const category of jsonData) {
-                const result = await this.categoryModel.updateOne(
-                    { name: category.name, id_user: category.id_user },
-                    { $setOnInsert: category },
-                    { upsert: true },
-                );
-
-                if (result.upsertedCount > 0) {
-                    console.log('Category inserted:', category.name);
-                } else {
-                    console.log('Category already exists:', category.name);
-                }
-            }
-        } catch (error) {
-            console.error('Error inserting document:', error);
-        }
-    }
-
-    async delete(id: string, userId: string): Promise<void> {
-        const findResult = await this.categoryModel.findById(id);
-
-        if (!findResult) {
-            throw new NotFoundException(`Expense with ID ${id} not found`);
-        }
-
-        if (findResult.id_user !== userId) {
-            throw new BadRequestException(
-                'This category was not created by you!',
-            );
-        }
-
-        await this.categoryModel.findByIdAndDelete(id);
+        return categories as TGetDto[];
     }
 
     async getCategoryID(name: string): Promise<string> {
-        return (await this.categoryModel.findOne({name}).exec())._id.toString();
+        return (
+            await this.categoryModel.findOne({ name }).exec()
+        )._id.toString();
     }
 }
