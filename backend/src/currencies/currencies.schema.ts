@@ -6,14 +6,17 @@ export type CurrencyDocument = HydratedDocument<Currency>;
 
 @Schema()
 export class Currency {
-    @Prop({required: true})
+    @Prop({ required: true })
     shortname: string;
+
+    @Prop({ required: true })
+    id_user: string;
 }
 
 export class CurrencyDTO extends Currency {
     @IsNotEmpty()
     @IsString()
-    id_currency: string;
+    _id: string;
 }
 
 export const CurrencySchema = SchemaFactory.createForClass(Currency);
