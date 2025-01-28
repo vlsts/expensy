@@ -14,7 +14,7 @@ ENV PUBLIC_BACKEND_URL=${PUBLIC_BACKEND_URL}
 ENV PUBLIC_CORBADO_AUTH_URL={PUBLIC_CORBADO_AUTH_URL}
 
 RUN apt-get update && apt-get install -y \
-    software-properties-common \
+    software-properties-common curl wget \
     npm
 RUN npm install npm@latest -g && \
     npm install n -g && \
