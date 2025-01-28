@@ -13,6 +13,9 @@ ENV PUBLIC_CORBADO_SUPPORT_MAIL=${PUBLIC_CORBADO_SUPPORT_MAIL}
 ENV PUBLIC_BACKEND_URL=${PUBLIC_BACKEND_URL}
 ENV PUBLIC_CORBADO_AUTH_URL={PUBLIC_CORBADO_AUTH_URL}
 
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+RUN nvm install 22
+
 RUN bun i
 RUN bun run build
 
