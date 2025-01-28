@@ -18,18 +18,31 @@
 
 # 🔧 Functional Specifications
 - The project will contain the following features:
+
   ✔️ Expense categories
+
   ✔️ Multiple accounts
+
   ✔️ Multiple currencies
+
   ✔️ Attachment of files / receipts / etc.
+
   ✔️ Overview visualization of expenses (Pie charts, graphs, statistics, averages, etc.)
+
   ✔️ User accounts ~~(+ extra features – forgot password, mail confirmation)~~
+
   ⏰ Data encryption
+
   ✔️ Expenses per day / month / year
+
   ⏰ Import bank transactions
+
   ⏰ Live exchange rate
+
   ✔️ Receipt scanning using phone
+
   ✔️ OCR performed on uploaded receipt
+
   ✔️ User authentication using Corbado
 
 # 🧑‍💻 Technical Specifications
