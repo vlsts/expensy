@@ -8,6 +8,43 @@
       "items": [
         {
           "type": "folder",
+          "name": "Deployed",
+          "items": [
+            {
+              "type": "http",
+              "name": "CreateCategoryDeployed",
+              "seq": 1,
+              "request": {
+                "url": "https://backend.expensy.ro/categories",
+                "method": "POST",
+                "headers": [
+                  {
+                    "name": "Content-Type",
+                    "value": "application/json",
+                    "enabled": true
+                  }
+                ],
+                "params": [],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"name\": \"football\",\n  \"id_icon\": \"randomid\",\n  \"color\": \"green\"\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [],
+                "tests": "",
+                "docs": "",
+                "auth": {
+                  "mode": "none"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "folder",
           "name": "Local",
           "items": [
             {
@@ -27,7 +64,7 @@
                 "params": [],
                 "body": {
                   "mode": "json",
-                  "json": "{\n  \"name\": \"basketball\",\n  \"id_icon\": \"randomid\",\n  \"color\": \"FFFFFF\"\n}",
+                  "json": "{\n  \"name\": \"baseball\",\n  \"id_icon\": \"randomid\",\n  \"color\": \"FFFFF0\"\n}",
                   "formUrlEncoded": [],
                   "multipartForm": []
                 },
@@ -39,7 +76,7 @@
                 "auth": {
                   "mode": "bearer",
                   "bearer": {
-                    "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6InBraS03OTYwMDY1MzU0NjM1NDYyMDg0IiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwczovL3Byby05Mjc0MTg3MTYxMjcyOTA5NTMyLmZyb250ZW5kYXBpLmNvcmJhZG8uaW8iLCJzdWIiOiJ1c3ItNTE2NjcwNjUyODQ4OTkyODkwOSIsImV4cCI6MTczNzY1MjgwMywibmJmIjoxNzM3NTY2MzkzLCJpYXQiOjE3Mzc1NjY0MDMsImp0aSI6InYzTjNKa1FESFhrUVZUNzhzWWJ3S2xjemNLb2RIaSIsIm9yaWciOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwiZW1haWwiOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwidmVyc2lvbiI6Mn0.TWVv08UXxYrshqXe0_3-5DNOwDjXyt0T8MbTXW7YxLWejsMPq0A4gHzFESFELeq6jmVyFQkXq-DA41IrLeTkakWjXm5bqWT-fpIo5xDeMuWxEh-kTW4QFhZjHmgsff2XnGk0Ouy9cFaf9hIfiJRJDstq2m6S7dVSn4nN73I3dwH0gHNn9yJVzIoTZkdJwO1o9Za2IfNjLAg39ZrvxXsFjmAHtVCPHyTAGL4A1e7l5zLGNqcoXAATGDiJPYrhOgK1jU_ph96e6yzWINuZ35z0IeZq2dFpsrljX4APAmOqE6us_lYY4HZJPos1n-f06Ky0RDp_sa1PxlfWgPTguxeyDA"
+                    "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6InBraS03OTYwMDY1MzU0NjM1NDYyMDg0IiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwczovL3Byby05Mjc0MTg3MTYxMjcyOTA5NTMyLmZyb250ZW5kYXBpLmNvcmJhZG8uaW8iLCJzdWIiOiJ1c3ItNTE2NjcwNjUyODQ4OTkyODkwOSIsImV4cCI6MTczODA5ODMxMCwibmJmIjoxNzM4MDExOTAwLCJpYXQiOjE3MzgwMTE5MTAsImp0aSI6IlBQVXlEbDJ6YmZpY3NwY0ZZOWdZZzl3VmxsM3BlbCIsIm9yaWciOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwiZW1haWwiOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwidmVyc2lvbiI6Mn0.xxHGL5sBBRSBiCEiJ0NZen6ZMOGs4ECHWkaS2-ZpYVUMo986b0xSAOPzkahgycCVhLsA0XlIMHs2l9h-Gu0TSD-ao9m4h0C3vkyGT8rk21eSr8TeJWY9IXWq3qquxK9_i2zbic0lie3_yfbs21WUNKw7-SkzRJTWrrMfyKgXAsr7Z-Uw7iNU2O3erCEsj_4Mh8AcEE8CiR0VSw16y2SGEpwFtOvxU3c4trsLwH4_rOLSj-9VB9LPCZzSU2ODonSenBLBTG86mLj5vepmApGZ2lqxZwa12ray0f9ql-8tkNGAWUCiL9Y3aDMTpmngOfMpf109KiYbP4vXZPIjDI0wvw"
                   }
                 }
               }
@@ -102,43 +139,6 @@
                   "bearer": {
                     "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6InBraS03OTYwMDY1MzU0NjM1NDYyMDg0IiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwczovL3Byby05Mjc0MTg3MTYxMjcyOTA5NTMyLmZyb250ZW5kYXBpLmNvcmJhZG8uaW8iLCJzdWIiOiJ1c3ItNTE2NjcwNjUyODQ4OTkyODkwOSIsImV4cCI6MTczNzY1MjgwMywibmJmIjoxNzM3NTY2MzkzLCJpYXQiOjE3Mzc1NjY0MDMsImp0aSI6InYzTjNKa1FESFhrUVZUNzhzWWJ3S2xjemNLb2RIaSIsIm9yaWciOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwiZW1haWwiOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwidmVyc2lvbiI6Mn0.TWVv08UXxYrshqXe0_3-5DNOwDjXyt0T8MbTXW7YxLWejsMPq0A4gHzFESFELeq6jmVyFQkXq-DA41IrLeTkakWjXm5bqWT-fpIo5xDeMuWxEh-kTW4QFhZjHmgsff2XnGk0Ouy9cFaf9hIfiJRJDstq2m6S7dVSn4nN73I3dwH0gHNn9yJVzIoTZkdJwO1o9Za2IfNjLAg39ZrvxXsFjmAHtVCPHyTAGL4A1e7l5zLGNqcoXAATGDiJPYrhOgK1jU_ph96e6yzWINuZ35z0IeZq2dFpsrljX4APAmOqE6us_lYY4HZJPos1n-f06Ky0RDp_sa1PxlfWgPTguxeyDA"
                   }
-                }
-              }
-            }
-          ]
-        },
-        {
-          "type": "folder",
-          "name": "Deployed",
-          "items": [
-            {
-              "type": "http",
-              "name": "CreateCategoryDeployed",
-              "seq": 1,
-              "request": {
-                "url": "https://backend.expensy.ro/categories",
-                "method": "POST",
-                "headers": [
-                  {
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "enabled": true
-                  }
-                ],
-                "params": [],
-                "body": {
-                  "mode": "json",
-                  "json": "{\n  \"name\": \"football\",\n  \"id_icon\": \"randomid\",\n  \"color\": \"green\"\n}",
-                  "formUrlEncoded": [],
-                  "multipartForm": []
-                },
-                "script": {},
-                "vars": {},
-                "assertions": [],
-                "tests": "",
-                "docs": "",
-                "auth": {
-                  "mode": "none"
                 }
               }
             }
@@ -224,39 +224,6 @@
       "items": [
         {
           "type": "folder",
-          "name": "Deployed",
-          "items": [
-            {
-              "type": "http",
-              "name": "GetExpensesDeployed",
-              "seq": 1,
-              "request": {
-                "url": "https://backend.expensy.ro/expenses",
-                "method": "GET",
-                "headers": [],
-                "params": [],
-                "body": {
-                  "mode": "none",
-                  "formUrlEncoded": [],
-                  "multipartForm": []
-                },
-                "script": {},
-                "vars": {},
-                "assertions": [],
-                "tests": "",
-                "docs": "",
-                "auth": {
-                  "mode": "bearer",
-                  "bearer": {
-                    "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6InBraS03OTYwMDY1MzU0NjM1NDYyMDg0IiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwczovL3Byby05Mjc0MTg3MTYxMjcyOTA5NTMyLmZyb250ZW5kYXBpLmNvcmJhZG8uaW8iLCJzdWIiOiJ1c3ItNTE2NjcwNjUyODQ4OTkyODkwOSIsImV4cCI6MTczNjg2NjY0MiwibmJmIjoxNzM2NzgwMjMyLCJpYXQiOjE3MzY3ODAyNDIsImp0aSI6IlE4WGlVZ1cyd0xWWG9Ucm55NXduSnVuRXRwSmNzNiIsIm9yaWciOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwiZW1haWwiOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwidmVyc2lvbiI6Mn0.Gz9gslm70GdF57KL6q2_EOUwqW4jvUbV1R-Xvm4VDw3xZL5jwMcgizIpbhXj-nCdEAemnT0ZXVniBXb07WzpM9Si1yIzGvkjuOnrcxS1N1RMZGw4lnbeGQ1ANdnruplLVw3VbNJ4Opbwg_Sqp_7tGvmbkgOk_gosR3PwVwFLQCuze6Kq0kGcXNYIfR8eelRBW7Fp4NfiGt19hMUnKGmQU9ypuIheIBKpPJDLplrEWIkW_HdHJlwjXWKSV7ZYE5wWM2knvuuUCYxy_ZWz_n0pSI_9R23y8aedcVvCPxoMyjcAVWZrS6XflEoSJFeLPPc_SSuRuSC7LgYAC0oFYqg0fQ"
-                  }
-                }
-              }
-            }
-          ]
-        },
-        {
-          "type": "folder",
           "name": "Local",
           "items": [
             {
@@ -311,7 +278,7 @@
                 "params": [
                   {
                     "name": "id",
-                    "value": "67913c702d6b990be72975b2",
+                    "value": "67914dbb8b99dedd88cd1718",
                     "type": "path",
                     "enabled": true
                   }
@@ -329,7 +296,7 @@
                 "auth": {
                   "mode": "bearer",
                   "bearer": {
-                    "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6InBraS03OTYwMDY1MzU0NjM1NDYyMDg0IiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwczovL3Byby05Mjc0MTg3MTYxMjcyOTA5NTMyLmZyb250ZW5kYXBpLmNvcmJhZG8uaW8iLCJzdWIiOiJ1c3ItNTE2NjcwNjUyODQ4OTkyODkwOSIsImV4cCI6MTczNzY1MjgwMywibmJmIjoxNzM3NTY2MzkzLCJpYXQiOjE3Mzc1NjY0MDMsImp0aSI6InYzTjNKa1FESFhrUVZUNzhzWWJ3S2xjemNLb2RIaSIsIm9yaWciOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwiZW1haWwiOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwidmVyc2lvbiI6Mn0.TWVv08UXxYrshqXe0_3-5DNOwDjXyt0T8MbTXW7YxLWejsMPq0A4gHzFESFELeq6jmVyFQkXq-DA41IrLeTkakWjXm5bqWT-fpIo5xDeMuWxEh-kTW4QFhZjHmgsff2XnGk0Ouy9cFaf9hIfiJRJDstq2m6S7dVSn4nN73I3dwH0gHNn9yJVzIoTZkdJwO1o9Za2IfNjLAg39ZrvxXsFjmAHtVCPHyTAGL4A1e7l5zLGNqcoXAATGDiJPYrhOgK1jU_ph96e6yzWINuZ35z0IeZq2dFpsrljX4APAmOqE6us_lYY4HZJPos1n-f06Ky0RDp_sa1PxlfWgPTguxeyDA"
+                    "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6InBraS03OTYwMDY1MzU0NjM1NDYyMDg0IiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwczovL3Byby05Mjc0MTg3MTYxMjcyOTA5NTMyLmZyb250ZW5kYXBpLmNvcmJhZG8uaW8iLCJzdWIiOiJ1c3ItNTE2NjcwNjUyODQ4OTkyODkwOSIsImV4cCI6MTczODA5ODMxMCwibmJmIjoxNzM4MDExOTAwLCJpYXQiOjE3MzgwMTE5MTAsImp0aSI6IlBQVXlEbDJ6YmZpY3NwY0ZZOWdZZzl3VmxsM3BlbCIsIm9yaWciOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwiZW1haWwiOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwidmVyc2lvbiI6Mn0.xxHGL5sBBRSBiCEiJ0NZen6ZMOGs4ECHWkaS2-ZpYVUMo986b0xSAOPzkahgycCVhLsA0XlIMHs2l9h-Gu0TSD-ao9m4h0C3vkyGT8rk21eSr8TeJWY9IXWq3qquxK9_i2zbic0lie3_yfbs21WUNKw7-SkzRJTWrrMfyKgXAsr7Z-Uw7iNU2O3erCEsj_4Mh8AcEE8CiR0VSw16y2SGEpwFtOvxU3c4trsLwH4_rOLSj-9VB9LPCZzSU2ODonSenBLBTG86mLj5vepmApGZ2lqxZwa12ray0f9ql-8tkNGAWUCiL9Y3aDMTpmngOfMpf109KiYbP4vXZPIjDI0wvw"
                   }
                 }
               }
@@ -340,6 +307,74 @@
               "seq": 1,
               "request": {
                 "url": "http://localhost/expenses",
+                "method": "GET",
+                "headers": [],
+                "params": [],
+                "body": {
+                  "mode": "none",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [],
+                "tests": "",
+                "docs": "",
+                "auth": {
+                  "mode": "bearer",
+                  "bearer": {
+                    "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6InBraS03OTYwMDY1MzU0NjM1NDYyMDg0IiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwczovL3Byby05Mjc0MTg3MTYxMjcyOTA5NTMyLmZyb250ZW5kYXBpLmNvcmJhZG8uaW8iLCJzdWIiOiJ1c3ItNTE2NjcwNjUyODQ4OTkyODkwOSIsImV4cCI6MTczODA5ODMxMCwibmJmIjoxNzM4MDExOTAwLCJpYXQiOjE3MzgwMTE5MTAsImp0aSI6IlBQVXlEbDJ6YmZpY3NwY0ZZOWdZZzl3VmxsM3BlbCIsIm9yaWciOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwiZW1haWwiOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwidmVyc2lvbiI6Mn0.xxHGL5sBBRSBiCEiJ0NZen6ZMOGs4ECHWkaS2-ZpYVUMo986b0xSAOPzkahgycCVhLsA0XlIMHs2l9h-Gu0TSD-ao9m4h0C3vkyGT8rk21eSr8TeJWY9IXWq3qquxK9_i2zbic0lie3_yfbs21WUNKw7-SkzRJTWrrMfyKgXAsr7Z-Uw7iNU2O3erCEsj_4Mh8AcEE8CiR0VSw16y2SGEpwFtOvxU3c4trsLwH4_rOLSj-9VB9LPCZzSU2ODonSenBLBTG86mLj5vepmApGZ2lqxZwa12ray0f9ql-8tkNGAWUCiL9Y3aDMTpmngOfMpf109KiYbP4vXZPIjDI0wvw"
+                  }
+                }
+              }
+            },
+            {
+              "type": "http",
+              "name": "UpdateExpense",
+              "seq": 4,
+              "request": {
+                "url": "http://localhost/expenses/:id",
+                "method": "PUT",
+                "headers": [],
+                "params": [
+                  {
+                    "name": "id",
+                    "value": "67914dbb8b99dedd88cd1718",
+                    "type": "path",
+                    "enabled": true
+                  }
+                ],
+                "body": {
+                  "mode": "json",
+                  "json": "{\n  \"amount\": 7\n}",
+                  "formUrlEncoded": [],
+                  "multipartForm": []
+                },
+                "script": {},
+                "vars": {},
+                "assertions": [],
+                "tests": "",
+                "docs": "",
+                "auth": {
+                  "mode": "bearer",
+                  "bearer": {
+                    "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6InBraS03OTYwMDY1MzU0NjM1NDYyMDg0IiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwczovL3Byby05Mjc0MTg3MTYxMjcyOTA5NTMyLmZyb250ZW5kYXBpLmNvcmJhZG8uaW8iLCJzdWIiOiJ1c3ItNTE2NjcwNjUyODQ4OTkyODkwOSIsImV4cCI6MTczODA5ODMxMCwibmJmIjoxNzM4MDExOTAwLCJpYXQiOjE3MzgwMTE5MTAsImp0aSI6IlBQVXlEbDJ6YmZpY3NwY0ZZOWdZZzl3VmxsM3BlbCIsIm9yaWciOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwiZW1haWwiOiJzdG9pY2FkYXZpZGlvYW5AZ21haWwuY29tIiwidmVyc2lvbiI6Mn0.xxHGL5sBBRSBiCEiJ0NZen6ZMOGs4ECHWkaS2-ZpYVUMo986b0xSAOPzkahgycCVhLsA0XlIMHs2l9h-Gu0TSD-ao9m4h0C3vkyGT8rk21eSr8TeJWY9IXWq3qquxK9_i2zbic0lie3_yfbs21WUNKw7-SkzRJTWrrMfyKgXAsr7Z-Uw7iNU2O3erCEsj_4Mh8AcEE8CiR0VSw16y2SGEpwFtOvxU3c4trsLwH4_rOLSj-9VB9LPCZzSU2ODonSenBLBTG86mLj5vepmApGZ2lqxZwa12ray0f9ql-8tkNGAWUCiL9Y3aDMTpmngOfMpf109KiYbP4vXZPIjDI0wvw"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "Deployed",
+          "items": [
+            {
+              "type": "http",
+              "name": "GetExpensesDeployed",
+              "seq": 1,
+              "request": {
+                "url": "https://backend.expensy.ro/expenses",
                 "method": "GET",
                 "headers": [],
                 "params": [],
