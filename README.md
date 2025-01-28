@@ -1,4 +1,3 @@
-# ?
 `Expensy` is a team project currently in development for the SPS 2024-2025 (**S**abloane de **P**roiectare **S**oftware) course held at Transilvania University of Brasov's [Faculty of Mathematics and Computer Science](https://mateinfo.unitbv.ro) (study programme: Computer Science).
 
 [![Built with Devbox](https://www.jetify.com/img/devbox/shield_moon.svg)](https://www.jetify.com/devbox/docs/contributor-quickstart/)
@@ -19,17 +18,32 @@
 
 # 🔧 Functional Specifications
 - The project will contain the following features:
-  - Expense categories
-  - Multiple accounts
-  - Multiple currencies
-  - Attachment of files / receipts / etc.
-  - Overview visualization of expenses (Pie charts, graphs, statistics, averages, etc.)
-  - User accounts (+ extra features – forgot password, mail confirmation)
-  - Data encryption
-  - Expenses per day / month / year
-  - Import bank transactions
-  - Live exchange rate
-  - etc... (To Complete Post Feedback)
+
+  ✔️ Expense categories
+
+  ✔️ Multiple accounts
+
+  ✔️ Multiple currencies
+
+  ✔️ Attachment of files / receipts / etc.
+
+  ✔️ Overview visualization of expenses (Pie charts, graphs, statistics, averages, etc.)
+
+  ✔️ User accounts ~~(+ extra features – forgot password, mail confirmation)~~
+
+  ⏰ Data encryption
+
+  ✔️ Expenses per day / month / year
+
+  ⏰ Import bank transactions
+
+  ⏰ Live exchange rate
+
+  ✔️ Receipt scanning using phone
+
+  ✔️ OCR performed on uploaded receipt
+
+  ✔️ User authentication using Corbado
 
 # 🧑‍💻 Technical Specifications
 - Frontend:
@@ -39,7 +53,7 @@
 - Backend:
   - NestJS (Typescript)
   - Mongoose
-  - Corbado (?)
+  - Corbado
 - IAC & Automation:
   - Terraform
   - Github Actions
@@ -49,15 +63,15 @@
   - Let's Encrypt Certificates
 - Other:
   - Docker
-  - Kubernetes
   - MongoDB
 - Testing:
+  - Jest for unit tests
   - Playwright (E2E)
-  - NestJS testing lib (API testing)
-  - Bun Test
+  - Bruno for integration tests
+  - k6 for performance tests
 
 # 📐 System Architectural Diagram
-![SysArchDiag](https://github.com/user-attachments/assets/68f59e3c-f93d-4ca6-8146-6bb86cf5fb17)
+![SysArchDiag](https://github.com/user-attachments/assets/09e747db-6ea0-4cce-90e1-a35723df2667)
 
 # 🕹️ Installation Steps (for Backend)
 - `TBD`
@@ -67,5 +81,5 @@
 - Stoica David-Ioan • [github](https://github.com/stoica-david) • [david.stoica@student.unitbv.ro](mailto:david.stoica@student.unitbv.ro)
  
 # ℹ️ Project info
-- Deadline: 15th of January
+- Deadline: 28th of January
 - Project coordinator / Professor: [Adrian Ber](https://github.com/beradrian)

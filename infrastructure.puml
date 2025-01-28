@@ -3,18 +3,18 @@
 
 node "Digital Ocean Infrastructure" {
     node "VPS Frontend" {
-        [nginx FE]
+        [Caddy FE]
         node "Docker FE" {
             [Svelte Frontend]
         }
     }
     node "VPS Backend" {
-        [nginx BE]
+        [Caddy BE]
         node "Docker BE" {
             [NestJS Backend]
         }
     }
-    [Database]
+    [MongoDB Database]
     [DNS]
 }
 
@@ -27,21 +27,21 @@ node "Domain Management" {
     [host-age.ro]
     [expensy.ro domain]
     [Let's Encrypt Certificates]
-    [certbot]
 }
 
-[DNS] --> [nginx FE] : points to
-[DNS] --> [nginx BE] : points to
-[nginx BE] --> [Docker BE] : forwards to
-[NestJS Backend] --> [Database] : manipulates
-[nginx FE] --> [Docker FE] : forwards to
-[Svelte Frontend] --> [nginx BE] : interacts with
+[DNS] --> [Caddy FE] : points to
+[DNS] --> [Caddy BE] : points to
+[Caddy BE] --> [Docker BE] : forwards to
+[NestJS Backend] --> [MongoDB Database] : manipulates
+[Caddy FE] --> [Docker FE] : forwards to
+[Svelte Frontend] --> [Caddy BE] : interacts with
 [Terraform] -left-> [Digital Ocean Infrastructure] : provisions
 [Github Actions] --> [Terraform] : triggers
 [host-age.ro] --> [expensy.ro domain] : provides
 [expensy.ro domain] --> [Digital Ocean Infrastructure] : points NS
-[certbot] --> [Let's Encrypt Certificates] : issues
-[nginx FE] --> [Let's Encrypt Certificates] : serves
-[nginx BE] --> [Let's Encrypt Certificates] : serves
+[Caddy FE] --> [Let's Encrypt Certificates] : issues
+[Caddy BE] --> [Let's Encrypt Certificates] : issues
+[Caddy FE] --> [Let's Encrypt Certificates] : serves
+[Caddy BE] --> [Let's Encrypt Certificates] : serves
 
 @enduml
