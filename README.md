@@ -1,4 +1,3 @@
-![image](https://github.com/user-attachments/assets/53b439d9-02c4-4878-ae48-7737d0187073)# ?
 `Expensy` is a team project currently in development for the SPS 2024-2025 (**S**abloane de **P**roiectare **S**oftware) course held at Transilvania University of Brasov's [Faculty of Mathematics and Computer Science](https://mateinfo.unitbv.ro) (study programme: Computer Science).
 
 [![Built with Devbox](https://www.jetify.com/img/devbox/shield_moon.svg)](https://www.jetify.com/devbox/docs/contributor-quickstart/)
