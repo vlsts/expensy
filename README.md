@@ -74,7 +74,30 @@
 ![SysArchDiag](https://github.com/user-attachments/assets/09e747db-6ea0-4cce-90e1-a35723df2667)
 
 # 🕹️ Installation Steps (for Backend)
-- `TBD`
+- Build Requirements: NodeJS (preferably >= 22), bun (or alternative package manager), Docker, Environment variables
+- Dev Requirements: Devbox (for development - optional, if not all of the above), Environment Variables
+
+## Docker example deployment command
+```sh
+docker run -d \
+  --name expensy-backend \
+  -p 8080:80 \
+  -e DB_HOST="mongodb+srv://%MONGO_HOST%" \ # MongoDB
+  -e DB_USERNAME=expensyadmin \ # MongoDB
+  -e DB_PASSWORD=%MONGODB_PASSWORD% \ # MongoDB
+  -e CORBADO_API=%CORBADO_API% \ # Corbado Passkeys
+  -e FRONTEND_API=%FRONTEND_API% \ # Corbado Passkeys
+  -e PROJECT_ID=%PROJECT_ID% \ # Corbado Passkeys
+  -e BACKEND_API=%BACKEND_API% \ # Backend deployment URL
+  -e FRONTEND_URL=%FRONTEND_URL% \ # Corbado Passkeys
+  -e CORBADO_FRONTEND_URL=%PUBLIC_CORBADO_AUTH_URL% \ # Corbado Passkeys
+  ghcr.io/vlsts/expensy-backend:latest
+```
+
+## Development instructions
+- Install devbox by Jetify
+- Run `devbox shell` in the root of the project
+- Run `bun i` (or alternative command for other package managers) for the frontend and backend project
 
 # 🧑‍🤝‍🧑‍ Team members
 - Sas Vlad-Ștefan • [github](https://github.com/vlsts) • [me@svs.pm](mailto:me@svs.pm) • [pgp key](https://keys.openpgp.org/search?q=ED82B2B95B3BEC7FEFC59C956E2186ECD0848BCA) (commits signed with this key until `cd6312f5`, from that point commits are signed with a SSH key)
