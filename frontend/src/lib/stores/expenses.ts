@@ -15,7 +15,7 @@ class ExpensesStore extends Store<Expense> {
         }
     }
 
-    async createExpense(expense: Omit<Expense, 'id_expense'>) {
+    async createExpense(expense: Omit<Expense, '_id'>) {
         this.updateState({ loading: true, error: null });
         try {
             const created = await this.apiCall<Expense>('/expenses', true, {
@@ -44,7 +44,7 @@ class ExpensesStore extends Store<Expense> {
 
             this.store.update(state => ({
                 ...state,
-                items: state.items.filter(item => item.id_expense !== id),
+                items: state.items.filter(item => item._id !== id),
                 loading: false
             }));
         } catch (error) {

@@ -22,7 +22,7 @@
 				.slice(0, MAX_CATEGORIES);
 
 			const categoryData = sortedCategories.map(([categoryId, total]) => {
-				const category = $categories.items.find((c) => c.id_category === categoryId);
+				const category = $categories.items.find((c) => c._id === categoryId);
 				return {
 					value: total,
 					backgroundColor: '#' + category?.color,

@@ -62,7 +62,7 @@
 							size="xs"
 							color="red"
 							class="!p-1 mt-2"
-							on:click={() => handleCategoryDelete(category.id_category)}>
+							on:click={() => handleCategoryDelete(category._id)}>
 							<Icon icon="bi:trash" class="w-3 h-3" />
 						</Button>
 					</div>
@@ -81,7 +81,7 @@
 				{#each $files.items as file}
 					<div class="flex items-center justify-between py-4 px-2">
 						<span class="truncate flex-1 mr-4">{file.filename}</span>
-						<Button size="xs" color="red" class="!p-1" on:click={() => handleFileDelete(file.id!)}>
+						<Button size="xs" color="red" class="!p-1" on:click={() => handleFileDelete(file._id!)}>
 							<Icon icon="bi:trash" class="w-3 h-3" />
 						</Button>
 					</div>

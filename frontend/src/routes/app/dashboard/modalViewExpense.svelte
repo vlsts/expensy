@@ -9,14 +9,14 @@
 
 	let { expenseId, open = $bindable() } = $props();
 
-	let expense = $derived($expenses.items.find((e) => e.id_expense === expenseId));
+	let expense = $derived($expenses.items.find((e) => e._id === expenseId));
 	let category = $derived(
-		expense ? $categories.items.find((c) => c.id_category === expense.id_category) : null
+		expense ? $categories.items.find((c) => c._id === expense.id_category) : null
 	);
 
 	function getFileName(fileId: string): string | null {
 		// First check if file exists in store
-		let file = $files.items.find((f) => f.id === fileId);
+		let file = $files.items.find((f) => f._id === fileId);
 
 		return file?.filename || null;
 	}
@@ -55,7 +55,7 @@
 				<Button
 					size="sm"
 					on:click={() => {
-						expenses.deleteExpense(expense.id_expense);
+						expenses.deleteExpense(expense._id);
 						open = false;
 					}}
 					class="flex items-center space-x-2">

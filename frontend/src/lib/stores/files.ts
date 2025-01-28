@@ -5,6 +5,8 @@ interface FileMetadata {
     filename: string;
     mime_type: string;
     doOCR: boolean;
+    data?: string;
+    size?: number
 }
 
 class FilesStore extends Store<FileAPI> {
@@ -24,6 +26,8 @@ class FilesStore extends Store<FileAPI> {
     async uploadFile(file: globalThis.File, metadata: FileMetadata) {
         this.updateState({ loading: true, error: null });
         try {
+            metadata.data = file.name;
+            metadata.size = file.size;
             const formData = new FormData();
             formData.append('file', file);
             formData.append('createFileDto', JSON.stringify(metadata));
@@ -56,7 +60,7 @@ class FilesStore extends Store<FileAPI> {
 
             this.update(state => ({
                 ...state,
-                items: state.items.filter(item => item.id !== id),
+                items: state.items.filter(item => item._id !== id),
                 loading: false
             }));
         } catch (error) {

@@ -40,7 +40,8 @@
 		if (!formData.amount || formData.amount <= 0) errors.amount = 'Valid amount is required';
 		if (!formData.id_currency) errors.id_currency = 'Currency is required';
 		if (!formData.id_category) errors.id_category = 'Category is required';
-
+		
+		console.log(errors)
 		if (Object.values(errors).some((error) => error)) return;
 
 		try {
@@ -96,7 +97,7 @@
 				required
 				bind:value={formData.id_category}
 				items={$categories.items.map((c) => ({
-					value: c.id_category,
+					value: c._id,
 					name: c.name
 				}))} />
 		</div>
@@ -108,7 +109,7 @@
 				multiple
 				bind:value={formData.id_files}
 				items={$files.items.map((f: FileApi) => ({
-					value: f.id,
+					value: f._id,
 					name: f.filename
 				}))} />
 		</div>

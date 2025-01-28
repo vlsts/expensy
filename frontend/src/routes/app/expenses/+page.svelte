@@ -80,7 +80,7 @@
 		<Select class="w-48" bind:value={selectedCategory}>
 			<option value="all">All Categories</option>
 			{#each $categories.items as category}
-				<option value={category.id_category}>{category.name}</option>
+				<option value={category._id}>{category.name}</option>
 			{/each}
 		</Select>
 	</div>
@@ -99,7 +99,7 @@
 	<!-- Expenses Grid -->
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 		{#each filterExpenses($expenses.items) as expense}
-			{@const category = $categories.items.find((c) => c.id_category === expense.id_category)}
+			{@const category = $categories.items.find((c) => c._id === expense.id_category)}
 			<Card padding="sm" class="hover:shadow-lg transition-shadow">
 				<div class="flex items-start gap-3">
 					{#if category}
@@ -126,7 +126,7 @@
 							size="xs"
 							color="light"
 							on:click={() => {
-								selectedExpenseId = expense.id_expense;
+								selectedExpenseId = expense._id;
 								modalOpen = true;
 							}}>
 							<Icon icon="bi:eye" class="w-4 h-4" />
@@ -136,7 +136,7 @@
 							color="red"
 							on:click={() => {
 								if (confirm('Are you sure you want to delete this expense?')) {
-									expenses.deleteExpense(expense.id_expense);
+									expenses.deleteExpense(expense._id);
 								}
 							}}>
 							<Icon icon="bi:trash" class="w-4 h-4" />

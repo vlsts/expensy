@@ -16,7 +16,7 @@
 	);
 
 	let getCategoryFromId = $derived((id_category: string) => {
-		return $categories.items.find((c) => c.id_category === id_category) ?? null;
+		return $categories.items.find((c) => c._id === id_category) ?? null;
 	});
 
 	$effect(() => {
@@ -76,7 +76,7 @@
 						{expense.amount.toFixed(2)}
 						<!-- {expense.id_currency} -->
 					</span>
-					<Button color="light" class="p-2" on:click={() => viewExpense(expense.id_expense)}>
+					<Button color="light" class="p-2" on:click={() => viewExpense(expense._id)}>
 						<EyeOutline class="w-4 h-4" />
 					</Button>
 				</div>

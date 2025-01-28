@@ -15,7 +15,7 @@ class CategoriesStore extends Store<Category> {
         }
     }
 
-    async createCategory(category: Omit<Category, 'id_category'>) {
+    async createCategory(category: Omit<Category, '_id'>) {
         this.updateState({ loading: true, error: null });
         try {
             const created = await this.apiCall<Category>('/categories', true, {
@@ -47,7 +47,7 @@ class CategoriesStore extends Store<Category> {
 
             this.update(state => ({
                 ...state,
-                items: state.items.filter(item => item.id_category !== id),
+                items: state.items.filter(item => item._id !== id),
                 loading: false
             }));
         } catch (error) {
