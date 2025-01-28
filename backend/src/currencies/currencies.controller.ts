@@ -9,12 +9,8 @@ export class CurrenciesController {
     constructor(private readonly currencyService: CurrenciesService) { }
 
     @Get()
-    async getAll(
-        @Request() request,
-    ): Promise<Omit<CurrencyDTO, '_id' | 'id_user'>[]> {
-        const currencies = await this.currencyService.getAll<
-            Omit<CurrencyDTO, '_id' | 'id_user'>
-        >(request.userId);
+    async getAll(): Promise<Omit<CurrencyDTO, '_id' | 'id_user'>[]> {
+        const currencies = await this.currencyService.getAll<Omit<CurrencyDTO, '_id' | 'id_user'>>();
 
         return currencies;
     }

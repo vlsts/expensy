@@ -67,11 +67,11 @@ export class FilesController {
 
             createFileDto.mime_type = file.mimetype;
 
-            const result = await this.filesService.create(
+            const result = await this.filesService.create_file_entry(
                 createFileDto,
-                file.buffer,
-                file.size,
                 request.userId,
+                [file.buffer,
+                file.size],
             );
 
             return result;

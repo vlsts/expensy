@@ -224,7 +224,6 @@ export class FilesService extends Service<File> {
                 expenseNumber,
                 uploadedFile,
             );
-
             await this.expenseService.create(expenseDTO, uploadedFile.id_user);
             addedExpenses.push(expenseDTO);
             expenseNumber++;
@@ -311,8 +310,7 @@ export class FilesService extends Service<File> {
             if (element.id_files.includes(id)) {
                 element.id_files.filter((id_file) => id_file !== id);
             }
-
-            this.fileModel.findByIdAndUpdate(element._id, element);
+            this.expenseService.update(element._id, element);
         });
     }
 }

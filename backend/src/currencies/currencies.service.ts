@@ -16,6 +16,14 @@ export class CurrenciesService extends Service<Currency> {
         ]);
     }
 
+    override async getAll<T>(): Promise<T[]> {
+        return (
+            await this.currencyModel
+                .find<T>()
+                .exec()
+        );
+    }
+
     async getCurrencyID(shortname: string): Promise<string> {
         switch (shortname) {
             case '$':

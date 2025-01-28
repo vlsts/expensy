@@ -112,6 +112,11 @@ export class Service<TEntity extends { id_user: string }> {
                 filter = {};
 
                 filterString.forEach((field) => {
+                    if (field === 'id_user') {
+                        filter[field] = '00000000-0000-0000-0000-000000000000';
+                        return;
+                    }
+
                     filter[field] = entity[field];
                 });
 
